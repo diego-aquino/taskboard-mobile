@@ -1,0 +1,30 @@
+{
+  "name": "taskboard-mobile",
+  "version": "0.1.0",
+  "license": "GPL-3.0",
+  "private": false,
+  "main": "node_modules/expo/AppEntry.js",
+  "repository": "git@github.com:diego-aquino/taskboard-mobile.git",
+  "scripts": {
+    "dev": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "expo": "~41.0.1",
+    "expo-status-bar": "~1.0.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+    "react-native-web": "~0.13.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-native": "^0.64.4",
+    "babel-plugin-module-resolver": "^4.1.0"
+  }
+}
