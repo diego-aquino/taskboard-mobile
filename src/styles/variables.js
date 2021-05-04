@@ -12,6 +12,12 @@ const variables = {
     green: '#48bb78',
   },
 
+  fonts: {
+    regular: 'RobotoRegular',
+    medium: 'RobotoMedium',
+    bold: 'RobotoBold',
+  },
+
   borderRadius: 7,
 
   transitionDuration: 150,
