@@ -3,7 +3,7 @@ import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 
 import { useFonts } from '~/hooks';
-import { Dashboard } from '~/pages';
+import AppRoutes from '~/routes';
 import styles from '~/styles/AppStyles';
 import variables from '~/styles/variables';
 
@@ -20,7 +20,7 @@ const App = () => {
         barStyle="dark-content"
         backgroundColor={variables.colors.white}
       />
-      <Dashboard />
+      <AppRoutes />
     </SafeAreaView>
   );
 };
