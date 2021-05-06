@@ -5,6 +5,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+
+    padding: 32,
+  },
+
+  spacing: {
+    marginTop: 16,
   },
 });
 

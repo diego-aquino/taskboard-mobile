@@ -1,28 +1,51 @@
-import React, { useCallback } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 
+import { Button, Input } from '~/components/common';
 import styles from '~/styles/pages/DashboardPageStyles';
+import * as validate from '~/utils/validation';
 
-const DashboardPage = ({ navigation }) => {
-  const navigateToLoginPage = useCallback(() => {
-    navigation.navigate('LoginPage');
-  }, [navigation]);
-
-  const navigateToSignUpPage = useCallback(() => {
-    navigation.navigate('SignUpPage');
-  }, [navigation]);
+const DashboardPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Text>Dashboard</Text>
+      <Input
+        label="Email"
+        placeholder="nome@dominio.com"
+        autoCompleteType="email"
+        keyboardType="email-address"
+        validate={validate.requiredEmailField}
+      />
+      <Input
+        style={styles.spacing}
+        label="Senha"
+        placeholder="********"
+        autoCompleteType="password"
+        secureTextEntry
+        validate={(value) => validate.requiredPasswordField(value, 8)}
+      />
 
-      <TouchableOpacity onPress={navigateToLoginPage}>
-        <Text>Página de Login</Text>
-      </TouchableOpacity>
+      <Input
+        style={styles.spacing}
+        label="Nome da tarefa"
+        placeholder="Nome..."
+        variant="outline"
+        validate={validate.requiredTextField}
+      />
 
-      <TouchableOpacity onPress={navigateToSignUpPage}>
-        <Text>Página de Sign Up</Text>
-      </TouchableOpacity>
+      <Button
+        style={styles.spacing}
+        label={isLoading ? 'Loading...' : 'Ready'}
+        loading={isLoading}
+      />
+      <Button
+        style={styles.spacing}
+        label={isLoading ? 'Stop loading' : 'Load'}
+        onPress={() =>
+          setIsLoading((currentLoadingState) => !currentLoadingState)
+        }
+      />
     </View>
   );
 };
