@@ -2,6 +2,7 @@ const variables = {
   colors: {
     darkBlue: '#0e1f55',
     lightBlue: '#6e7ca9',
+    lightBlueDim: 'rgba(110, 124, 169, 0.6)',
     veryLightBlue: '#efeef9',
     brightBlue: '#2878fe',
     brightBlueOnHover: '#1861db',

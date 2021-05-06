@@ -1,3 +1,4 @@
+import AlertIcon from './AlertIcon';
 import LoadingIcon from './LoadingIcon';
 
-export { LoadingIcon };
+export { AlertIcon, LoadingIcon };
