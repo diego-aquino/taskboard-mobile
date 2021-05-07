@@ -8,9 +8,9 @@ import React, {
   useState,
 } from 'react';
 
-import * as accountsServices from '~/services/accounts';
+import accountsServices from '~/services/accounts';
 import { storageKeys } from '~/utils/local';
-import * as network from '~/utils/network';
+import network from '~/utils/network';
 
 const AuthContext = createContext({});
 
@@ -147,7 +147,9 @@ export function useAuth() {
     logoutUser,
   } = useAuthContext();
 
-  useEffect(() => authenticateUser(), [authenticateUser]);
+  useEffect(() => {
+    authenticateUser();
+  }, [authenticateUser]);
 
   return {
     tokens,

@@ -56,6 +56,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  globalAlertMessage: {
+    marginTop: 24,
+    justifyContent: 'center',
+  },
+
   footer: {
     width: '100%',
   },

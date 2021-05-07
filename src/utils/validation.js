@@ -6,25 +6,29 @@ const validationMessages = {
   passwordTooShort: 'A senha deve ter no mínimo 8 caracteres',
 };
 
-export async function requiredTextField(textValue) {
-  return yup
-    .string()
-    .required(validationMessages.requiredField)
-    .validate(textValue);
-}
+const validate = {
+  async requiredTextField(textValue) {
+    return yup
+      .string()
+      .required(validationMessages.requiredField)
+      .validate(textValue);
+  },
 
-export async function requiredPasswordField(passwordValue, minLength) {
-  return yup
-    .string()
-    .required(validationMessages.requiredField)
-    .min(minLength, validationMessages.passwordTooShort)
-    .validate(passwordValue);
-}
+  async requiredPasswordField(passwordValue, minLength) {
+    return yup
+      .string()
+      .required(validationMessages.requiredField)
+      .min(minLength, validationMessages.passwordTooShort)
+      .validate(passwordValue);
+  },
 
-export async function requiredEmailField(emailValue) {
-  return yup
-    .string()
-    .email(validationMessages.invalidEmail)
-    .required(validationMessages.requiredField)
-    .validate(emailValue);
-}
+  async requiredEmailField(emailValue) {
+    return yup
+      .string()
+      .email(validationMessages.invalidEmail)
+      .required(validationMessages.requiredField)
+      .validate(emailValue);
+  },
+};
+
+export default validate;
