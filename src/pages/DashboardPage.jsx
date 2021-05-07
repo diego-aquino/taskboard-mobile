@@ -1,51 +1,21 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
-import { Button, Input } from '~/components/common';
+import { useAccount } from '~/contexts/AccountContext';
 import styles from '~/styles/pages/DashboardPageStyles';
-import * as validate from '~/utils/validation';
 
-const DashboardPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const DashboardPage = ({ navigation }) => {
+  const { accountData } = useAccount();
 
   return (
     <View style={styles.container}>
-      <Input
-        label="Email"
-        placeholder="nome@dominio.com"
-        autoCompleteType="email"
-        keyboardType="email-address"
-        validate={validate.requiredEmailField}
-      />
-      <Input
-        style={styles.spacing}
-        label="Senha"
-        placeholder="********"
-        autoCompleteType="password"
-        secureTextEntry
-        validate={(value) => validate.requiredPasswordField(value, 8)}
-      />
+      <Text>
+        {accountData && `${accountData?.firstName} ${accountData?.lastName}`}
+      </Text>
 
-      <Input
-        style={styles.spacing}
-        label="Nome da tarefa"
-        placeholder="Nome..."
-        variant="outline"
-        validate={validate.requiredTextField}
-      />
-
-      <Button
-        style={styles.spacing}
-        label={isLoading ? 'Loading...' : 'Ready'}
-        loading={isLoading}
-      />
-      <Button
-        style={styles.spacing}
-        label={isLoading ? 'Stop loading' : 'Load'}
-        onPress={() =>
-          setIsLoading((currentLoadingState) => !currentLoadingState)
-        }
-      />
+      <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
+        <Text>Retornar para a Página de Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
