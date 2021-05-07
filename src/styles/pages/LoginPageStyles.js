@@ -14,11 +14,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginTop: 16,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  headerLeftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  headerRightSection: {
+    height: 25,
+    width: 90,
+    justifyContent: 'flex-end',
   },
 
   headerLinkText: {
-    paddingBottom: 8,
+    paddingVertical: 8,
     borderStyle: 'solid',
     borderBottomWidth: 2,
     borderColor: 'transparent',
@@ -29,7 +41,7 @@ const styles = StyleSheet.create({
 
   activeHeaderLinkText: {
     color: variables.colors.brightBlue,
-    borderColor: variables.colors.brightBlue,
+    borderBottomColor: variables.colors.brightBlue,
   },
 
   main: {

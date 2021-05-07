@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 
-import { ArrowIcon } from '~/assets';
+import { ArrowIcon, Logo } from '~/assets';
 import { Alert, Button, Input } from '~/components/common';
 import { useAuthContext } from '~/contexts/AuthContext';
 import accountsServices from '~/services/accounts';
@@ -116,20 +116,26 @@ const LoginPage = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text
-            style={[
-              styles.headerLinkText,
-              styles.activeHeaderLinkText,
-              { marginRight: 24 },
-            ]}
-          >
-            Login
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToSignUpPage}>
-          <Text style={styles.headerLinkText}>Registre-se</Text>
-        </TouchableOpacity>
+        <View style={styles.headerLeftSection}>
+          <TouchableOpacity>
+            <Text
+              style={[
+                styles.headerLinkText,
+                styles.activeHeaderLinkText,
+                { marginRight: 24 },
+              ]}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={navigateToSignUpPage}>
+            <Text style={styles.headerLinkText}>Registre-se</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.headerRightSection}>
+          <Logo />
+        </View>
       </View>
 
       <View style={styles.main}>
