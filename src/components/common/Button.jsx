@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { TouchableOpacity, Text, Animated, Easing } from 'react-native';
+import { TouchableOpacity, Text, Animated, Easing, View } from 'react-native';
 
 import { LoadingIcon } from '~/assets';
 import styles from '~/styles/components/common/ButtonStyles';
 import variables from '~/styles/variables';
 
-const Button = ({ label, loading: isLoading, style, ...rest }) => {
+const Button = ({ label, icon, loading: isLoading, style, ...rest }) => {
   const animationReferenceValue = useRef(new Animated.Value(0)).current;
 
   const rotatingAnimation = useMemo(
@@ -45,9 +45,21 @@ const Button = ({ label, loading: isLoading, style, ...rest }) => {
       activeOpacity={0.7}
       {...rest}
     >
-      <Text style={[styles.label, isLoading && styles.loadingLabel]}>
-        {label}
-      </Text>
+      <View style={styles.contentWrapper}>
+        <Text style={[styles.label, isLoading && styles.loadingLabel]}>
+          {label}
+        </Text>
+        {icon && (
+          <View
+            style={[
+              label && { marginLeft: 8 },
+              !label && isLoading && { opacity: 0 },
+            ]}
+          >
+            {icon}
+          </View>
+        )}
+      </View>
 
       {isLoading && (
         <Animated.View

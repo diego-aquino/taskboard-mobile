@@ -4,11 +4,11 @@ import variables from '~/styles/variables';
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     justifyContent: 'center',
   },
 
   label: {
+    fontSize: 16,
     color: variables.colors.lightBlue,
     fontFamily: variables.fonts.medium,
   },
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 
   input: {
     color: variables.colors.darkBlue,
+    fontSize: 16,
     borderStyle: 'solid',
   },
 
