@@ -15,6 +15,23 @@ const accountsServices = {
 
     return accessToken;
   },
+
+  async logout(accessToken) {
+    await api.post(
+      '/accounts/logout',
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  },
+
+  async details(accessToken) {
+    const detailsResponse = await api.get('/accounts/details', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const { account: accountData } = detailsResponse.data;
+
+    return accountData;
+  },
 };
 
 export default accountsServices;

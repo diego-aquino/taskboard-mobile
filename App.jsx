@@ -2,6 +2,8 @@ import AppLoading from 'expo-app-loading';
 import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 
+import { AccountContextProvider } from '~/contexts/AccountContext';
+import { AuthContextProvider } from '~/contexts/AuthContext';
 import { useFonts } from '~/hooks';
 import AppRoutes from '~/routes';
 import styles from '~/styles/AppStyles';
@@ -20,7 +22,11 @@ const App = () => {
         barStyle="dark-content"
         backgroundColor={variables.colors.white}
       />
-      <AppRoutes />
+      <AuthContextProvider>
+        <AccountContextProvider>
+          <AppRoutes />
+        </AccountContextProvider>
+      </AuthContextProvider>
     </SafeAreaView>
   );
 };
