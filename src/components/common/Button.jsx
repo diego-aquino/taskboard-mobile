@@ -49,7 +49,16 @@ const Button = ({ label, icon, loading: isLoading, style, ...rest }) => {
         <Text style={[styles.label, isLoading && styles.loadingLabel]}>
           {label}
         </Text>
-        {icon && <View style={label && { marginLeft: 8 }}>{icon}</View>}
+        {icon && (
+          <View
+            style={[
+              label && { marginLeft: 8 },
+              !label && isLoading && { opacity: 0 },
+            ]}
+          >
+            {icon}
+          </View>
+        )}
       </View>
 
       {isLoading && (
