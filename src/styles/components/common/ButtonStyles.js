@@ -4,7 +4,6 @@ import variables from '~/styles/variables';
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     padding: 12,
     borderRadius: variables.borderRadius,
 
@@ -12,6 +11,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     backgroundColor: variables.colors.brightBlue,
+  },
+
+  contentWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   loading: {
