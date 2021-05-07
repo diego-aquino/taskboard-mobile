@@ -1,7 +1,9 @@
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react';
 import { Text, TextInput, View } from 'react-native';
@@ -20,40 +22,46 @@ const Input = (
     style,
     onChangeText,
     onEndEditing,
+    onSubmitEditing,
     ...rest
   },
   ref,
 ) => {
-  const [value, setValue] = useState(initialValue);
-  const [alertMessage, setAlertMessage] = useState(null);
+  const inputRef = useRef(null);
+  const [value, setValue] = useState('');
 
+  const [alertMessage, setAlertMessage] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
 
-  const executeValidation = useCallback(
-    async (valueToValidate) => {
-      if (!validate) return true;
+  useEffect(() => {
+    if (initialValue) {
+      setValue(initialValue);
+    }
+  }, [initialValue]);
 
-      try {
-        await validate(valueToValidate);
-        setAlertMessage(null);
-        return true;
-      } catch (validationError) {
-        setAlertMessage(validationError.message);
-        return false;
-      }
-    },
-    [validate],
-  );
+  const executeValidation = useCallback(async () => {
+    if (!validate) return true;
+
+    try {
+      await validate(value);
+      setAlertMessage(null);
+      return true;
+    } catch (validationError) {
+      setAlertMessage(validationError.message);
+      return false;
+    }
+  }, [validate, value]);
 
   useImperativeHandle(
     ref,
     () => ({
       value,
       isValid: !alertMessage,
-      validate: () => executeValidation(value),
-      setCustomAlertMessage: (customAlertMessage) =>
-        setAlertMessage(customAlertMessage),
-      clear: () => setValue(''),
+      validate: executeValidation,
+      setCustomAlert: (message) => setAlertMessage(message),
+      clearAlert: () => setAlertMessage(null),
+      clear: () => inputRef.current?.clear(),
+      focus: () => inputRef.current?.focus(),
     }),
     [value, alertMessage, executeValidation],
   );
@@ -73,10 +81,19 @@ const Input = (
   const handleEndEditing = useCallback(
     async (event) => {
       setIsFocused(false);
-      executeValidation(event.nativeEvent.text);
+      executeValidation();
       onEndEditing?.(event);
     },
     [executeValidation, onEndEditing],
+  );
+
+  const handleSubmitEditing = useCallback(
+    async (event) => {
+      setIsFocused(false);
+      executeValidation();
+      onSubmitEditing?.(event);
+    },
+    [executeValidation, onSubmitEditing],
   );
 
   return (
@@ -94,16 +111,18 @@ const Input = (
       )}
 
       <TextInput
+        ref={inputRef}
         style={[
           styles.input,
           styles[`${variant}Input`],
           isFocused && styles[`${variant}FocusedInput`],
           alertMessage && styles.inputWithAlert,
         ]}
-        placeholderTextColor={variables.colors.lightBlueDim}
         onChangeText={handleTextChange}
+        placeholderTextColor={variables.colors.lightBlueDim}
         onFocus={handleFocus}
         onEndEditing={handleEndEditing}
+        onSubmitEditing={handleSubmitEditing}
         {...rest}
       />
 
