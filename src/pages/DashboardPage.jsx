@@ -1,14 +1,14 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 
 import { useAccount } from '~/contexts/AccountContext';
-import styles from '~/styles/pages/DashboardPageStyles';
+import { Container } from '~/styles/pages/DashboardPageStyles';
 
 const DashboardPage = ({ navigation }) => {
   const { accountData } = useAccount();
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Text>
         {accountData && `${accountData?.firstName} ${accountData?.lastName}`}
       </Text>
@@ -16,7 +16,7 @@ const DashboardPage = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
         <Text>Retornar para a Página de Login</Text>
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 };
 

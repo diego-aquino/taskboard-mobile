@@ -1,109 +1,125 @@
-import { StyleSheet } from 'react-native';
+import styled, { css } from 'styled-components/native';
 
+import { ArrowIcon as BaseArrowIcon } from '~/assets';
+import { Alert, Button, Input as BaseInput } from '~/components/common';
 import variables from '~/styles/variables';
 
-const styles = StyleSheet.create({
-  container: {
+export const Container = styled.ScrollView.attrs({
+  contentContainerStyle: {
     paddingTop: 16,
     flexGrow: 1,
     justifyContent: 'space-between',
   },
+})``;
 
-  header: {
-    width: '100%',
-    paddingHorizontal: 24,
-    marginTop: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+export const Header = styled.View`
+  width: 100%;
+  padding: 0 24px;
+  margin-top: 16px;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const HeaderLeftSection = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const HeaderRightSection = styled.View`
+  height: 25px;
+  width: 90px;
+  justify-content: flex-end;
+`;
+
+export const HeaderLinkText = styled.Text`
+  padding: 8px 0;
+  border: 2px solid transparent;
+
+  font-size: 18px;
+  font-family: ${variables.fonts.bold};
+  color: ${variables.colors.darkBlue};
+
+  ${({ active }) =>
+    active &&
+    css`
+      color: ${variables.colors.brightBlue};
+      border-bottom-color: ${variables.colors.brightBlue};
+    `}
+
+  ${({ spaced }) =>
+    spaced &&
+    css`
+      margin-left: 24px;
+    `}
+`;
+
+export const Main = styled.View`
+  width: 100%;
+  padding: 48px 24px;
+  flex: 1;
+`;
+
+export const LoginForm = styled.View`
+  flex: 1;
+`;
+
+export const Input = styled(BaseInput).attrs(({ spaced }) => ({
+  containerStyle: {
+    marginTop: spaced ? 16 : 0,
   },
+}))``;
 
-  headerLeftSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+export const PageTitle = styled.Text`
+  margin-bottom: 12px;
 
-  headerRightSection: {
-    height: 25,
-    width: 90,
-    justifyContent: 'flex-end',
-  },
+  color: ${variables.colors.darkBlue};
+  font-family: ${variables.fonts.bold};
+  font-size: 36px;
+`;
 
-  headerLinkText: {
-    paddingVertical: 8,
-    borderStyle: 'solid',
-    borderBottomWidth: 2,
-    borderColor: 'transparent',
-    fontSize: 18,
-    fontFamily: variables.fonts.bold,
-    color: variables.colors.darkBlue,
-  },
+export const PageDescription = styled.Text`
+  margin-bottom: 36px;
+  color: ${variables.colors.lightBlue};
+  font-size: 18px;
+`;
 
-  activeHeaderLinkText: {
-    color: variables.colors.brightBlue,
-    borderBottomColor: variables.colors.brightBlue,
-  },
+export const GlobalAlert = styled(Alert)`
+  margin-top: 24px;
+  justify-content: center;
+`;
 
-  main: {
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingVertical: 48,
-    flex: 1,
-  },
+export const Footer = styled.View`
+  width: 100%;
+`;
 
-  loginForm: {
-    flex: 1,
-  },
+export const RegisterAccountLink = styled.TouchableOpacity`
+  align-self: flex-start;
+`;
 
-  pageTitle: {
-    color: variables.colors.darkBlue,
-    fontFamily: variables.fonts.bold,
-    fontSize: 36,
-    marginBottom: 12,
-  },
+export const RegisterAccountLinkText = styled.Text`
+  margin-bottom: 16px;
+  padding: 0 24px;
 
-  pageDescription: {
-    marginBottom: 36,
-    color: variables.colors.lightBlue,
-    fontSize: 18,
-  },
+  color: ${variables.colors.brightBlue};
+  font-size: 14px;
+`;
 
-  globalAlertMessage: {
-    marginTop: 24,
-    justifyContent: 'center',
-  },
+export const ArrowIcon = styled(BaseArrowIcon)`
+  margin-top: 1px;
+`;
 
-  footer: {
-    width: '100%',
-  },
+export const FooterBottomDetail = styled.View`
+  height: 64px;
+  background-color: ${variables.colors.darkBlue};
+  z-index: -1;
+`;
 
-  registerAccountLink: {
-    alignSelf: 'flex-start',
-  },
+export const SubmitButton = styled(Button)`
+  padding: 14px;
 
-  registerAccountLinkText: {
-    marginBottom: 16,
-    paddingHorizontal: 24,
-    color: variables.colors.brightBlue,
-    fontSize: 14,
-  },
-
-  arrowIcon: {
-    marginTop: 1,
-  },
-
-  footerBottomDetail: {
-    height: 64,
-    backgroundColor: variables.colors.darkBlue,
-    zIndex: -1,
-  },
-
-  submitButton: {
-    position: 'absolute',
-    right: 24,
-    bottom: '66%',
-    padding: 14,
-  },
-});
-
-export default styles;
+  position: absolute;
+  right: 24px;
+  bottom: 40px;
+`;

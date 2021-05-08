@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
-import styles from '~/styles/pages/SignUpPageStyles';
+import { Container } from '~/styles/pages/SignUpPageStyles';
 
 const SignUpPage = () => (
-  <View style={styles.container}>
+  <Container>
     <Text>SignUp</Text>
-  </View>
+  </Container>
 );
 
 export default SignUpPage;
