@@ -41,7 +41,9 @@ export const LoadingIconWrapper = styled(Animated.View)`
   right: 12px;
 `;
 
-export const LoadingIcon = styled(BaseLoadingIcon)`
-  position: absolute;
-  align-self: center;
-`;
+export const LoadingIcon = styled(BaseLoadingIcon).attrs({
+  containerStyle: {
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+})``;
