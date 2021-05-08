@@ -1,14 +1,16 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 
-import { AlertIcon } from '~/assets';
-import styles from '~/styles/components/common/AlertStyles';
+import {
+  Container,
+  AlertIcon,
+  Message,
+} from '~/styles/components/common/AlertStyles';
 
-const Alert = ({ message, style, ...rest }) => (
-  <View style={[styles.container, style]} {...rest}>
-    <AlertIcon style={styles.alertIcon} />
-    <Text style={styles.message}>{message}</Text>
-  </View>
+const Alert = ({ message, ...rest }) => (
+  <Container {...rest}>
+    <AlertIcon />
+    <Message>{message}</Message>
+  </Container>
 );
 
 export default Alert;

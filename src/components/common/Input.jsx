@@ -6,12 +6,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Text, TextInput, View } from 'react-native';
 
-import styles from '~/styles/components/common/InputStyles';
-import variables from '~/styles/variables';
-
-import Alert from './Alert';
+import {
+  Container,
+  Label,
+  TextInput,
+  Alert,
+} from '~/styles/components/common/InputStyles';
 
 const Input = (
   {
@@ -19,11 +20,11 @@ const Input = (
     validate,
     variant = 'normal',
     initialValue = '',
-    style,
     onChangeText,
     onEndEditing,
     onSubmitEditing,
-    ...rest
+    containerStyle,
+    ...inputRestProps
   },
   ref,
 ) => {
@@ -97,39 +98,27 @@ const Input = (
   );
 
   return (
-    <View style={[styles.container, style]}>
+    <Container style={containerStyle}>
       {label && (
-        <Text
-          style={[
-            styles.label,
-            isFocused && styles.focusedLabel,
-            alertMessage && styles.labelWithAlert,
-          ]}
-        >
+        <Label focused={isFocused} withAlert={!!alertMessage}>
           {label}
-        </Text>
+        </Label>
       )}
 
       <TextInput
         ref={inputRef}
-        style={[
-          styles.input,
-          styles[`${variant}Input`],
-          isFocused && styles[`${variant}FocusedInput`],
-          alertMessage && styles.inputWithAlert,
-        ]}
-        onChangeText={handleTextChange}
-        placeholderTextColor={variables.colors.lightBlueDim}
+        variant={variant}
+        focused={isFocused}
+        withAlert={!!alertMessage}
         onFocus={handleFocus}
+        onChangeText={handleTextChange}
         onEndEditing={handleEndEditing}
         onSubmitEditing={handleSubmitEditing}
-        {...rest}
+        {...inputRestProps}
       />
 
-      {alertMessage && (
-        <Alert style={styles.alertContainer} message={alertMessage} />
-      )}
-    </View>
+      {alertMessage && <Alert message={alertMessage} />}
+    </Container>
   );
 };
 
