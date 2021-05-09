@@ -110,6 +110,7 @@ export const AuthContextProvider = ({ children }) => {
     await makeAuthenticatedRequest((accessToken) =>
       accountsServices.logout(accessToken),
     );
+    await AsyncStorage.removeItem(storageKeys.REFRESH_TOKEN);
   };
 
   return (

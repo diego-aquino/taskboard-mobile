@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { TouchableOpacity } from 'react-native';
 
 import {
   ChevronLeftIcon,
@@ -51,7 +50,7 @@ const COMPLETED_TASKS = [
 ];
 
 const DashboardPage = ({ navigation }) => {
-  const { isLoading: isLoadingAuth, isAuthenticated } = useAuth();
+  const { isLoading: isLoadingAuth, isAuthenticated, logoutUser } = useAuth();
   const { accountData } = useAccount();
 
   const sidebarRef = useRef(null);
@@ -64,6 +63,11 @@ const DashboardPage = ({ navigation }) => {
 
   const openSidebar = useCallback(() => sidebarRef.current?.open(), []);
   const closeSidebar = useCallback(() => sidebarRef.current?.close(), []);
+
+  const handleLogout = useCallback(async () => {
+    await logoutUser();
+    navigation.navigate('LoginPage');
+  }, [logoutUser, navigation]);
 
   if (!isAuthenticated || !accountData) {
     return (
@@ -102,7 +106,7 @@ const DashboardPage = ({ navigation }) => {
           <UserName>{accountData.lastName}</UserName>
         </SidebarMain>
 
-        <LogoutButton>
+        <LogoutButton onPress={handleLogout}>
           <LogoutIcon />
           <LogoutButtonText>Logout</LogoutButtonText>
         </LogoutButton>
