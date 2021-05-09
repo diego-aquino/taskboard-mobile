@@ -1,12 +1,29 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
-import { ArrowIcon, Logo } from '~/assets';
-import { Alert, Button, Input } from '~/components/common';
+import { Logo } from '~/assets';
 import { useAuthContext } from '~/contexts/AuthContext';
 import accountsServices from '~/services/accounts';
-import styles from '~/styles/pages/LoginPageStyles';
+import {
+  Container,
+  Header,
+  HeaderLeftSection,
+  HeaderRightSection,
+  HeaderLinkText,
+  Main,
+  LoginForm,
+  Input,
+  PageTitle,
+  PageDescription,
+  GlobalAlert,
+  Footer,
+  RegisterAccountLink,
+  RegisterAccountLinkText,
+  ArrowIcon,
+  FooterBottomDetail,
+  SubmitButton,
+} from '~/styles/pages/LoginPageStyles';
 import { storageKeys } from '~/utils/local';
 import network from '~/utils/network';
 import validate from '~/utils/validation';
@@ -114,38 +131,29 @@ const LoginPage = ({ navigation }) => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeftSection}>
+    <Container>
+      <Header>
+        <HeaderLeftSection>
           <TouchableOpacity>
-            <Text
-              style={[
-                styles.headerLinkText,
-                styles.activeHeaderLinkText,
-                { marginRight: 24 },
-              ]}
-            >
-              Login
-            </Text>
+            <HeaderLinkText active>Login</HeaderLinkText>
           </TouchableOpacity>
           <TouchableOpacity onPress={navigateToSignUpPage}>
-            <Text style={styles.headerLinkText}>Registre-se</Text>
+            <HeaderLinkText spaced>Registre-se</HeaderLinkText>
           </TouchableOpacity>
-        </View>
+        </HeaderLeftSection>
 
-        <View style={styles.headerRightSection}>
+        <HeaderRightSection>
           <Logo />
-        </View>
-      </View>
+        </HeaderRightSection>
+      </Header>
 
-      <View style={styles.main}>
-        <Text style={styles.pageTitle}>Login</Text>
-        <Text style={styles.pageDescription}>Seja bem vindo de volta!</Text>
+      <Main>
+        <PageTitle>Login</PageTitle>
+        <PageDescription>Seja bem vindo de volta!</PageDescription>
 
-        <View style={styles.loginForm}>
+        <LoginForm>
           <Input
             ref={emailInputRef}
-            style={{ marginBottom: 16 }}
             label="Email"
             placeholder="nome@dominio.com"
             autoCompleteType="email"
@@ -162,37 +170,29 @@ const LoginPage = ({ navigation }) => {
             secureTextEntry
             validate={(password) => validate.requiredPasswordField(password, 8)}
             onSubmitEditing={handlePasswordSubmitEditing}
+            spaced
           />
 
-          {globalAlertMessage && (
-            <Alert
-              style={styles.globalAlertMessage}
-              message={globalAlertMessage}
-            />
-          )}
-        </View>
-      </View>
+          {globalAlertMessage && <GlobalAlert message={globalAlertMessage} />}
+        </LoginForm>
+      </Main>
 
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.registerAccountLink}
-          onPress={navigateToSignUpPage}
-        >
-          <Text style={styles.registerAccountLinkText}>
+      <Footer>
+        <RegisterAccountLink onPress={navigateToSignUpPage}>
+          <RegisterAccountLinkText>
             Deseja criar uma nova conta?
-          </Text>
-        </TouchableOpacity>
+          </RegisterAccountLinkText>
+        </RegisterAccountLink>
 
-        <View style={styles.footerBottomDetail}>
-          <Button
-            style={styles.submitButton}
-            loading={isLoadingLogin}
-            icon={<ArrowIcon style={styles.arrowIcon} />}
-            onPress={handleSubmit}
-          />
-        </View>
-      </View>
-    </ScrollView>
+        <SubmitButton
+          loading={isLoadingLogin}
+          icon={<ArrowIcon />}
+          onPress={handleSubmit}
+        />
+
+        <FooterBottomDetail />
+      </Footer>
+    </Container>
   );
 };
 

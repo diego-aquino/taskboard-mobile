@@ -1,22 +1,19 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
 
+import { AlertIcon as BaseAlertIcon } from '~/assets';
 import variables from '~/styles/variables';
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+export const Container = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
 
-  alertIcon: {
-    marginRight: 6,
-  },
+export const AlertIcon = styled(BaseAlertIcon)`
+  margin-right: 6px;
+`;
 
-  message: {
-    color: variables.colors.lightRed,
-    fontFamily: variables.fonts.medium,
-    fontSize: 14,
-  },
-});
-
-export default styles;
+export const Message = styled.Text`
+  color: ${variables.colors.lightRed};
+  font-family: ${variables.fonts.medium};
+  font-size: 14px;
+`;

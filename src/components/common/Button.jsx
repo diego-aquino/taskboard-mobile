@@ -1,11 +1,17 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { TouchableOpacity, Text, Animated, Easing, View } from 'react-native';
+import { Animated, Easing } from 'react-native';
 
-import { LoadingIcon } from '~/assets';
-import styles from '~/styles/components/common/ButtonStyles';
+import {
+  Container,
+  ContentWrapper,
+  Label,
+  LoadingIconWrapper,
+  LoadingIcon,
+  IconWrapper,
+} from '~/styles/components/common/ButtonStyles';
 import variables from '~/styles/variables';
 
-const Button = ({ label, icon, loading: isLoading, style, ...rest }) => {
+const Button = ({ label, icon, loading: isLoading, ...rest }) => {
   const animationReferenceValue = useRef(new Animated.Value(0)).current;
 
   const rotatingAnimation = useMemo(
@@ -39,42 +45,22 @@ const Button = ({ label, icon, loading: isLoading, style, ...rest }) => {
   );
 
   return (
-    <TouchableOpacity
-      style={[styles.container, isLoading && styles.loading, style]}
-      disabled={isLoading}
-      activeOpacity={0.7}
-      {...rest}
-    >
-      <View style={styles.contentWrapper}>
-        <Text style={[styles.label, isLoading && styles.loadingLabel]}>
-          {label}
-        </Text>
+    <Container dim={isLoading} disabled={isLoading} {...rest}>
+      <ContentWrapper>
+        <Label hidden={isLoading}>{label}</Label>
         {icon && (
-          <View
-            style={[
-              label && { marginLeft: 8 },
-              !label && isLoading && { opacity: 0 },
-            ]}
-          >
+          <IconWrapper hidden={isLoading} spaced={!!label}>
             {icon}
-          </View>
+          </IconWrapper>
         )}
-      </View>
+      </ContentWrapper>
 
       {isLoading && (
-        <Animated.View
-          style={[
-            styles.loadingIconContainer,
-            { transform: [{ rotate: rotateValue }] },
-          ]}
-        >
-          <LoadingIcon
-            style={styles.loadingIcon}
-            fill={variables.colors.white}
-          />
-        </Animated.View>
+        <LoadingIconWrapper style={{ transform: [{ rotate: rotateValue }] }}>
+          <LoadingIcon fill={variables.colors.white} />
+        </LoadingIconWrapper>
       )}
-    </TouchableOpacity>
+    </Container>
   );
 };
 

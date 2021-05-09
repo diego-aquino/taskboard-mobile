@@ -1,14 +1,9 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
 
 import variables from '~/styles/variables';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: variables.colors.white,
-
-    fontFamily: variables.fonts.regular,
-  },
-});
-
-export default styles;
+export const Container = styled.SafeAreaView`
+  flex: 1;
+  background-color: ${variables.colors.white};
+  font-family: ${variables.fonts.regular};
+`;

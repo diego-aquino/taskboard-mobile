@@ -1,62 +1,64 @@
-import { StyleSheet } from 'react-native';
+import styled, { css } from 'styled-components/native';
 
+import BaseAlert from '~/components/common/Alert';
 import variables from '~/styles/variables';
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-  },
+export const Container = styled.View`
+  justify-content: center;
+`;
 
-  label: {
-    fontSize: 16,
-    color: variables.colors.lightBlue,
-    fontFamily: variables.fonts.medium,
-  },
+export const Label = styled.Text`
+  font-size: 16px;
+  color: ${variables.colors.lightBlue};
+  font-family: ${variables.fonts.medium};
 
-  focusedLabel: {
-    color: variables.colors.brightBlueOnHover,
-  },
+  ${({ focused }) =>
+    focused &&
+    css`
+      color: ${variables.colors.brightBlueOnHover};
+    `}
 
-  labelWithAlert: {
-    color: variables.colors.lightRed,
-  },
+  ${({ withAlert }) =>
+    withAlert &&
+    css`
+      color: ${variables.colors.lightRed};
+    `}
+`;
 
-  input: {
-    color: variables.colors.darkBlue,
-    fontSize: 16,
-    borderStyle: 'solid',
-  },
+export const TextInput = styled.TextInput.attrs({
+  placeholderTextColor: variables.colors.lightBlueDim,
+})`
+  border-radius: ${variables.borderRadius}px;
 
-  inputWithAlert: {
-    borderColor: variables.colors.lightRed,
-  },
+  color: ${variables.colors.darkBlue};
+  font-size: 16px;
 
-  normalInput: {
-    marginTop: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: variables.borderRadius,
-    borderWidth: 1,
-    borderColor: variables.colors.lightBlueDim,
-  },
+  ${({ variant, focused }) =>
+    variant === 'normal' &&
+    css`
+      margin-top: 6px;
+      padding: 6px 12px;
 
-  normalFocusedInput: {
-    borderColor: variables.colors.brightBlue,
-  },
+      border: 1px solid
+        ${focused ? variables.colors.brightBlue : variables.colors.lightBlueDim};
+    `}
 
-  outlineInput: {
-    paddingVertical: 6,
-    borderColor: variables.colors.lightBlueDim,
-    borderBottomWidth: 1,
-  },
+  ${({ variant, focused }) =>
+    variant === 'outline' &&
+    css`
+      padding: 6px 0;
+      border: 0px solid
+        ${focused ? variables.colors.brightBlue : variables.colors.lightBlueDim};
+      border-bottom-width: 1px;
+    `}
 
-  outlineFocusedInput: {
-    borderColor: variables.colors.brightBlue,
-  },
+  ${({ withAlert }) =>
+    withAlert &&
+    css`
+      border-color: ${variables.colors.lightRed};
+    `}
+`;
 
-  alertContainer: {
-    marginTop: 6,
-  },
-});
-
-export default styles;
+export const Alert = styled(BaseAlert)`
+  margin-top: 6px;
+`;

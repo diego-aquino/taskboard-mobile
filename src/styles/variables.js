@@ -21,8 +21,8 @@ const variables = {
 
   borderRadius: 7,
 
-  transitionDuration: 150,
-  transitionDurationFast: 100,
+  transitionDuration: '0.15s',
+  transitionDurationFast: '0.1s',
 };
 
 export default variables;

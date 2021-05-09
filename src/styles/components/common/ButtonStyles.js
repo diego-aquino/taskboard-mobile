@@ -1,48 +1,47 @@
-import { StyleSheet } from 'react-native';
+import { Animated } from 'react-native';
+import styled from 'styled-components/native';
 
+import { LoadingIcon as BaseLoadingIcon } from '~/assets';
 import variables from '~/styles/variables';
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 12,
-    borderRadius: variables.borderRadius,
+export const Container = styled.TouchableOpacity.attrs({ activeOpacity: 0.7 })`
+  padding: 12px;
+  border-radius: ${variables.borderRadius}px;
 
-    alignItems: 'center',
-    justifyContent: 'center',
+  align-items: center;
+  justify-content: center;
 
-    backgroundColor: variables.colors.brightBlue,
-  },
+  background-color: ${variables.colors.brightBlue};
 
-  contentWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
+  opacity: ${({ dim }) => (dim ? 0.7 : 1)};
+`;
 
-  loading: {
-    opacity: 0.7,
-  },
+export const ContentWrapper = styled.View`
+  flex-direction: row;
+  justify-content: center;
+`;
 
-  label: {
-    color: variables.colors.white,
-    fontFamily: variables.fonts.medium,
-  },
+export const Label = styled.Text`
+  color: ${variables.colors.white};
+  font-family: ${variables.fonts.medium};
 
-  loadingLabel: {
-    opacity: 0,
-  },
+  opacity: ${({ hidden }) => (hidden ? 0 : 1)};
+`;
 
-  loadingIconContainer: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    bottom: 12,
-    right: 12,
-  },
+export const IconWrapper = styled.View`
+  margin-left: ${({ spaced }) => (spaced ? '8px' : 0)};
+  opacity: ${({ hidden }) => (hidden ? 0 : 1)};
+`;
 
-  loadingIcon: {
-    position: 'absolute',
-    alignSelf: 'center',
-  },
-});
+export const LoadingIconWrapper = styled(Animated.View)`
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  bottom: 12px;
+  right: 12px;
+`;
 
-export default styles;
+export const LoadingIcon = styled(BaseLoadingIcon)`
+  position: absolute;
+  align-self: center;
+`;
