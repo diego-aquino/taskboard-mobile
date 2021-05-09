@@ -1,7 +1,6 @@
 import { Animated } from 'react-native';
 import styled from 'styled-components/native';
 
-import { LoadingIcon as BaseLoadingIcon } from '~/assets';
 import variables from '~/styles/variables';
 
 export const Container = styled.TouchableOpacity.attrs({ activeOpacity: 0.7 })`
@@ -40,10 +39,3 @@ export const LoadingIconWrapper = styled(Animated.View)`
   bottom: 12px;
   right: 12px;
 `;
-
-export const LoadingIcon = styled(BaseLoadingIcon).attrs({
-  containerStyle: {
-    position: 'absolute',
-    alignSelf: 'center',
-  },
-})``;

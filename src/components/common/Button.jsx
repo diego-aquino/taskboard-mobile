@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { LoadingIcon } from '~/assets';
 import {
   Container,
   ContentWrapper,
   Label,
   LoadingIconWrapper,
-  LoadingIcon,
   IconWrapper,
 } from '~/styles/components/common/ButtonStyles';
 
