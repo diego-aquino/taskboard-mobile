@@ -8,6 +8,7 @@ const variables = {
     brightBlueOnHover: '#1861db',
     white: '#f7f8ff',
     whiteOnHover: '#c6c7cf',
+    lightWhiteOnHover: '#d8d8de',
     lightRed: '#ff667a',
     yellow: '#d69e2e',
     green: '#48bb78',
