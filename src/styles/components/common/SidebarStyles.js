@@ -11,7 +11,7 @@ export const Container = styled(Animated.View)`
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 9998;
+  z-index: 9997;
 
   background-color: ${variables.colors.darkBlue};
 `;
