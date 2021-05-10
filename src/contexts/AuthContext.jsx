@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const isRequestingAuthentication = useRef(false);
 
-  const authenticateUser = useCallback(async () => {
+  const authenticate = useCallback(async () => {
     if (isAuthenticated || isRequestingAuthentication.current) return;
 
     isRequestingAuthentication.current = true;
@@ -58,7 +58,6 @@ export const AuthContextProvider = ({ children }) => {
 
     try {
       const accessToken = await accountsServices.token(refreshToken);
-
       setTokens({ accessToken, refreshToken });
       await AsyncStorage.setItem(storageKeys.REFRESH_TOKEN, refreshToken);
     } catch {
@@ -99,19 +98,30 @@ export const AuthContextProvider = ({ children }) => {
         const newAccessToken = await requestAndApplyNewAccessToken(
           refreshToken,
         );
-
         return fetcher(newAccessToken);
       }
     },
     [tokens, isAuthenticated, requestAndApplyNewAccessToken],
   );
 
-  const logoutUser = async () => {
-    await makeAuthenticatedRequest((accessToken) =>
-      accountsServices.logout(accessToken),
-    );
-    await AsyncStorage.removeItem(storageKeys.REFRESH_TOKEN);
-  };
+  const login = useCallback(
+    async (email, password) => {
+      const responseData = await accountsServices.login(email, password);
+      const { accessToken, refreshToken } = responseData;
+
+      setTokens({ accessToken, refreshToken });
+      await AsyncStorage.setItem(storageKeys.REFRESH_TOKEN, refreshToken);
+    },
+    [setTokens],
+  );
+
+  const logout = useCallback(async () => {
+    await Promise.all([
+      makeAuthenticatedRequest(accountsServices.logout),
+      AsyncStorage.removeItem(storageKeys.REFRESH_TOKEN),
+    ]);
+    setTokens({ accessToken: null, refreshToken: null });
+  }, [makeAuthenticatedRequest]);
 
   return (
     <AuthContext.Provider
@@ -122,10 +132,11 @@ export const AuthContextProvider = ({ children }) => {
         setTokens,
         setAccessToken,
         setRefreshToken,
-        authenticateUser,
+        authenticate,
         requestAndApplyNewAccessToken,
         makeAuthenticatedRequest,
-        logoutUser,
+        login,
+        logout,
       }}
     >
       {children}
@@ -138,26 +149,12 @@ export function useAuthContext() {
 }
 
 export function useAuth() {
-  const {
-    tokens,
-    isLoading,
-    isAuthenticated,
-    setTokens,
-    authenticateUser,
-    makeAuthenticatedRequest,
-    logoutUser,
-  } = useAuthContext();
+  const context = useAuthContext();
+  const { authenticate } = context;
 
   useEffect(() => {
-    authenticateUser();
-  }, [authenticateUser]);
+    authenticate();
+  }, [authenticate]);
 
-  return {
-    tokens,
-    isLoading,
-    isAuthenticated,
-    setTokens,
-    makeAuthenticatedRequest,
-    logoutUser,
-  };
+  return context;
 }

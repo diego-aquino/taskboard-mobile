@@ -1,12 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 
-import StackRoutes from './StackRoutes';
+import { LoadingScreen } from '~/components/common';
+import { useAuth } from '~/contexts/AuthContext';
 
-const AppRoutes = () => (
-  <NavigationContainer>
-    <StackRoutes />
-  </NavigationContainer>
-);
+import AppRoutes from './AppRoutes';
+import AuthRoutes from './AuthRoutes';
 
-export default AppRoutes;
+const Routes = () => {
+  const { isAuthenticated, isLoading: isLoadingAuth } = useAuth();
+
+  if (isLoadingAuth) {
+    return <LoadingScreen />;
+  }
+
+  return (
+    <NavigationContainer>
+      {isAuthenticated ? <AppRoutes /> : <AuthRoutes />}
+    </NavigationContainer>
+  );
+};
+
+export default Routes;

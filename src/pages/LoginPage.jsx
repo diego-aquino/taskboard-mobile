@@ -1,10 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { Logo } from '~/assets';
 import { useAuthContext } from '~/contexts/AuthContext';
-import accountsServices from '~/services/accounts';
 import { StatusBar } from '~/styles/global';
 import {
   Container,
@@ -25,12 +23,11 @@ import {
   FooterBottomDetail,
   SubmitButton,
 } from '~/styles/pages/LoginPageStyles';
-import { storageKeys } from '~/utils/local';
 import network from '~/utils/network';
 import validate from '~/utils/validation';
 
 const LoginPage = ({ navigation }) => {
-  const { setTokens } = useAuthContext();
+  const { login } = useAuthContext();
 
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
@@ -46,23 +43,6 @@ const LoginPage = ({ navigation }) => {
     [],
   );
 
-  const loginAccount = useCallback(
-    async (email, password) => {
-      const responseData = await accountsServices.login(email, password);
-      const { accessToken, refreshToken } = responseData;
-      setTokens({ accessToken, refreshToken });
-
-      await AsyncStorage.setItem(storageKeys.REFRESH_TOKEN, refreshToken);
-    },
-    [setTokens],
-  );
-
-  const handleLoginError = useCallback((error) => {
-    const errorType = network.getErrorType(error.response);
-    const feedbackMessage = network.generateFeedbackMessage(errorType);
-    setGlobalAlertMessage(feedbackMessage);
-  }, []);
-
   const allFieldsAreValid = useCallback(async () => {
     const inputRefs = [emailInputRef, passwordInputRef];
 
@@ -73,29 +53,27 @@ const LoginPage = ({ navigation }) => {
     return validationResults.every((result) => result === true);
   }, []);
 
+  const handleLoginError = useCallback((error) => {
+    const errorType = network.getErrorType(error.response);
+    const feedbackMessage = network.generateFeedbackMessage(errorType);
+    setGlobalAlertMessage(feedbackMessage);
+  }, []);
+
   const handleSubmit = useCallback(async () => {
     const isValidSubmit = await allFieldsAreValid();
     if (!isValidSubmit) return;
 
     setGlobalAlertMessage(null);
+    setIsLoadingLogin(true);
     const { email, password } = gatherFormData();
 
     try {
-      setIsLoadingLogin(true);
-      await loginAccount(email, password);
-      navigation.navigate('DashboardPage');
+      await login(email, password);
     } catch (error) {
-      handleLoginError(error);
-    } finally {
       setIsLoadingLogin(false);
+      handleLoginError(error);
     }
-  }, [
-    allFieldsAreValid,
-    gatherFormData,
-    handleLoginError,
-    loginAccount,
-    navigation,
-  ]);
+  }, [allFieldsAreValid, gatherFormData, handleLoginError, login]);
 
   const handleEmailSubmitEditing = useCallback(() => {
     passwordInputRef.current?.focus();
