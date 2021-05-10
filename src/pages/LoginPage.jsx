@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native';
 import { Logo } from '~/assets';
 import { useAuthContext } from '~/contexts/AuthContext';
 import accountsServices from '~/services/accounts';
+import { StatusBar } from '~/styles/global';
 import {
   Container,
   Header,
@@ -132,6 +133,8 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <Container>
+      <StatusBar variant="dark" />
+
       <Header>
         <HeaderLeftSection>
           <TouchableOpacity>

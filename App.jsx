@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import AppLoading from 'expo-app-loading';
 import React from 'react';
 
@@ -6,7 +7,6 @@ import { AuthContextProvider } from '~/contexts/AuthContext';
 import { useFonts } from '~/hooks';
 import AppRoutes from '~/routes';
 import { Container } from '~/styles/AppStyles';
-import { StatusBar } from '~/styles/global';
 
 const App = () => {
   const [fontsAreLoaded] = useFonts();
@@ -17,7 +17,6 @@ const App = () => {
 
   return (
     <Container>
-      <StatusBar variant="light" />
       <AuthContextProvider>
         <AccountContextProvider>
           <AppRoutes />
