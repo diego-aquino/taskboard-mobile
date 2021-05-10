@@ -48,17 +48,13 @@ const COMPLETED_TASKS = [
 ];
 
 const DashboardPage = () => {
-  const { logoutUser } = useAuth();
+  const { logout } = useAuth();
   const { accountData } = useAccount();
 
   const sidebarRef = useRef(null);
 
   const openSidebar = useCallback(() => sidebarRef.current?.open(), []);
   const closeSidebar = useCallback(() => sidebarRef.current?.close(), []);
-
-  const handleLogout = useCallback(async () => {
-    await logoutUser();
-  }, [logoutUser]);
 
   if (!accountData) {
     return <LoadingScreen />;
@@ -92,7 +88,7 @@ const DashboardPage = () => {
           <UserName>{accountData.lastName}</UserName>
         </SidebarMain>
 
-        <LogoutButton onPress={handleLogout}>
+        <LogoutButton onPress={logout}>
           <LogoutIcon />
           <LogoutButtonText>Logout</LogoutButtonText>
         </LogoutButton>
