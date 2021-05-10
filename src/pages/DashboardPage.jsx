@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import {
   ChevronLeftIcon,
@@ -8,14 +8,12 @@ import {
   PlusIcon,
   PreferencesIcon,
 } from '~/assets';
-import { Sidebar } from '~/components/common';
+import { LoadingScreen, Sidebar } from '~/components/common';
 import { useAccount } from '~/contexts/AccountContext';
 import { useAuth } from '~/contexts/AuthContext';
 import { StatusBar } from '~/styles/global';
 import {
   Container,
-  LoadingContainer,
-  LoadingIcon,
   Header,
   HeaderButton,
   Main,
@@ -49,33 +47,21 @@ const COMPLETED_TASKS = [
   { id: 8, name: 'Task 8', isCompleted: true, priority: 'low' },
 ];
 
-const DashboardPage = ({ navigation }) => {
-  const { isLoading: isLoadingAuth, isAuthenticated, logoutUser } = useAuth();
+const DashboardPage = () => {
+  const { logoutUser } = useAuth();
   const { accountData } = useAccount();
 
   const sidebarRef = useRef(null);
-
-  useEffect(() => {
-    if (!isLoadingAuth && !isAuthenticated) {
-      navigation.navigate('LoginPage');
-    }
-  }, [isAuthenticated, isLoadingAuth, navigation]);
 
   const openSidebar = useCallback(() => sidebarRef.current?.open(), []);
   const closeSidebar = useCallback(() => sidebarRef.current?.close(), []);
 
   const handleLogout = useCallback(async () => {
     await logoutUser();
-    navigation.navigate('LoginPage');
-  }, [logoutUser, navigation]);
+  }, [logoutUser]);
 
-  if (!isAuthenticated || !accountData) {
-    return (
-      <LoadingContainer>
-        <StatusBar variant="dark" />
-        <LoadingIcon animated />
-      </LoadingContainer>
-    );
+  if (!accountData) {
+    return <LoadingScreen />;
   }
 
   return (

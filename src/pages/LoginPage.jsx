@@ -83,19 +83,11 @@ const LoginPage = ({ navigation }) => {
     try {
       setIsLoadingLogin(true);
       await loginAccount(email, password);
-      navigation.navigate('DashboardPage');
     } catch (error) {
-      handleLoginError(error);
-    } finally {
       setIsLoadingLogin(false);
+      handleLoginError(error);
     }
-  }, [
-    allFieldsAreValid,
-    gatherFormData,
-    handleLoginError,
-    loginAccount,
-    navigation,
-  ]);
+  }, [allFieldsAreValid, gatherFormData, handleLoginError, loginAccount]);
 
   const handleEmailSubmitEditing = useCallback(() => {
     passwordInputRef.current?.focus();

@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 
-import { LoadingIcon as BaseLoadingIcon } from '~/assets';
 import { Task as BaseTask } from '~/components/dashboardPage';
 import variables from '~/styles/variables';
 
@@ -8,22 +7,6 @@ export const Container = styled.View`
   padding: 24px 24px 0;
   flex: 1;
 `;
-
-export const LoadingContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-
-  background-color: ${variables.colors.darkBlue};
-`;
-
-export const LoadingIcon = styled(BaseLoadingIcon).attrs({
-  containerStyle: {
-    width: '15%',
-    height: '15%',
-    opacity: 0.8,
-  },
-})``;
 
 export const Header = styled.View`
   flex-direction: row;
