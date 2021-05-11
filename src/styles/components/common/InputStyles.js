@@ -5,6 +5,7 @@ import variables from '~/styles/variables';
 
 export const Container = styled.View`
   justify-content: center;
+  width: 100%;
 `;
 
 export const Label = styled.Text`

@@ -111,7 +111,7 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <Container>
-      <StatusBar variant="dark" />
+      <StatusBar variant="light" />
 
       <Header>
         <HeaderLeftSection>
