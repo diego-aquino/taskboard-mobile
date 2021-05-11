@@ -1,9 +1,27 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
- 
+
 import { Logo } from '~/assets';
 import { StatusBar } from '~/styles/global';
-import { Container, TwoColumnInputSection, HeaderLeftSection, HeaderLinkText, HeaderRightSection, LoginAccountLink, LoginAccountLinkText, SignUpForm, Main, Footer, SubmitButton, PageTitle, PageDescription, FooterBottomColor, Input, ArrowIcon, Header } from '~/styles/pages/SignUpPageStyles';
+import {
+  Container,
+  TwoColumnInputSection,
+  HeaderLeftSection,
+  HeaderLinkText,
+  HeaderRightSection,
+  LoginAccountLink,
+  LoginAccountLinkText,
+  SignUpForm,
+  Main,
+  Footer,
+  SubmitButton,
+  PageTitle,
+  PageDescription,
+  FooterBottomColor,
+  Input,
+  ArrowIcon,
+  Header,
+} from '~/styles/pages/SignUpPageStyles';
 import validate from '~/utils/validation';
 
 const SignUpPage = ({ navigation }) => {
@@ -11,10 +29,10 @@ const SignUpPage = ({ navigation }) => {
     () => navigation.navigate('LoginPage'),
     [navigation],
   );
-  
-  return(
+
+  return (
     <Container>
-      <StatusBar variant="dark" />
+      <StatusBar variant="light" />
 
       <Header>
         <HeaderLeftSection>
@@ -32,59 +50,60 @@ const SignUpPage = ({ navigation }) => {
       </Header>
       <Main>
         <PageTitle>Registre-se</PageTitle>
-        <PageDescription>E gerencie suas tarefas com eficiência!</PageDescription>
+        <PageDescription>
+          E gerencie suas tarefas com eficiência!
+        </PageDescription>
 
         <SignUpForm>
-          <TwoColumnInputSection>
-            <Input 
+          <TwoColumnInputSection spaced>
+            <Input
               label="Nome"
               placeholder="Nome"
               validate={validate.requiredTextField}
               twoInput
             />
-            <Input 
+            <Input
               label="Sobrenome"
               placeholder="Sobrenome"
               validate={validate.requiredTextField}
               twoInput
             />
           </TwoColumnInputSection>
-          <Input 
+          <Input
             label="Email"
             placeholder="nome@dominio.com"
             keyboardType="email-address"
             validate={validate.requiredEmailField}
+            spaced
           />
-          <TwoColumnInputSection>
-            <Input 
+          <TwoColumnInputSection spaced>
+            <Input
               label="Senha"
               placeholder="********"
               secureTextEntry
-              validate={(password) => validate.requiredPasswordField(password, 8)}
+              validate={(password) =>
+                validate.requiredPasswordField(password, 8)
+              }
               twoInput
-              spaced
             />
-            <Input 
+            <Input
               label="Confirmar senha"
               placeholder="********"
               secureTextEntry
-              validate={(password) => validate.requiredPasswordField(password, 8)}
+              validate={(password) =>
+                validate.requiredPasswordField(password, 8)
+              }
               twoInput
-              spaced
             />
           </TwoColumnInputSection>
         </SignUpForm>
       </Main>
       <Footer>
         <LoginAccountLink onPress={navigateToLoginPage}>
-          <LoginAccountLinkText>
-            Já tem uma conta?
-          </LoginAccountLinkText>
+          <LoginAccountLinkText>Já tem uma conta?</LoginAccountLinkText>
         </LoginAccountLink>
 
-        <SubmitButton 
-          icon={<ArrowIcon />}
-        />
+        <SubmitButton icon={<ArrowIcon />} />
 
         <FooterBottomColor />
       </Footer>

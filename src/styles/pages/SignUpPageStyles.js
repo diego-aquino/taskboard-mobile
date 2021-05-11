@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components/native';
 
 import { ArrowIcon as BaseArrowIcon } from '~/assets';
-import { Button, Input as BaseInput} from '~/components/common';
+import { Button, Input as BaseInput } from '~/components/common';
 import variables from '~/styles/variables';
 
 export const Container = styled.ScrollView.attrs({
@@ -66,17 +66,18 @@ export const SignUpForm = styled.View`
 `;
 
 export const TwoColumnInputSection = styled.View`
+  margin-top: ${({ spaced }) => (spaced ? 16 : 0)}px;
+
   display: flex;
-  flex: 1;
   flex-direction: row;
   align-items: flex-start;
-  width: 45%;
+  justify-content: space-between;
 `;
 
 export const Input = styled(BaseInput).attrs(({ spaced, twoInput }) => ({
   containerStyle: {
-    marginTop: spaced ? 30: 0,
-    marginRight: twoInput ? 30: 0,
+    width: twoInput ? '47%' : '100%',
+    marginTop: spaced ? 16 : 0,
   },
 }))``;
 
