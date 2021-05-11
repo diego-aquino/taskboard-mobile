@@ -1,4 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   ChevronLeftIcon,
@@ -34,6 +41,16 @@ import {
   LogoWrapper,
   CloseSidebarButton,
 } from '~/styles/pages/DashboardPageStyles';
+import { storageKeys } from '~/utils/local';
+
+const DEFAULT_SORTING_PREFERENCES = {
+  criteria: 'completed',
+  orders: {
+    priority: 'ascending',
+    name: 'ascending',
+    completed: 'ascending',
+  },
+};
 
 const DashboardPage = () => {
   const { logout } = useAuth();
@@ -50,16 +67,54 @@ const DashboardPage = () => {
   const openModal = useCallback(() => setModalIsActive(true), []);
   const closeModal = useCallback(() => setModalIsActive(false), []);
 
-  const handleSortMethodChange = useCallback(
-    (criteria, order) => {
-      if (criteria === 'completed') {
-        setShouldReverseSections(order !== 'ascending');
-      } else {
-        sortTasks(criteria, order);
-      }
-    },
-    [sortTasks],
+  const [tasksAreSorted, setTasksAreSorted] = useState(false);
+  const [initialSortingPreferences, setInitialSortingPreferences] = useState(
+    {},
   );
+
+  const saveSortingPreferencesLocally = useCallback(
+    async (criteria, orders) => {
+      await AsyncStorage.setItem(
+        storageKeys.SORTING_PREFERENCES,
+        JSON.stringify({ criteria, orders }),
+      );
+    },
+    [],
+  );
+
+  const applySortingPreferences = useCallback(
+    async (criteria, orders) => {
+      const currentOrder = orders[criteria];
+      if (criteria === 'completed') {
+        setShouldReverseSections(currentOrder !== 'ascending');
+      } else {
+        sortTasks(criteria, currentOrder);
+      }
+
+      await saveSortingPreferencesLocally(criteria, orders);
+    },
+    [sortTasks, saveSortingPreferencesLocally],
+  );
+
+  useEffect(() => {
+    const readLocalSortingPreferences = async () => {
+      const stringifiedPreferences = await AsyncStorage.getItem(
+        storageKeys.SORTING_PREFERENCES,
+      );
+
+      const { criteria, orders } = stringifiedPreferences
+        ? JSON.parse(stringifiedPreferences)
+        : DEFAULT_SORTING_PREFERENCES;
+
+      await applySortingPreferences(criteria, orders);
+
+      setShouldReverseSections(orders.completed !== 'ascending');
+      setInitialSortingPreferences({ criteria, orders });
+      setTasksAreSorted(true);
+    };
+
+    readLocalSortingPreferences();
+  }, [applySortingPreferences]);
 
   const taskListSections = useMemo(() => {
     const sections = [
@@ -69,7 +124,7 @@ const DashboardPage = () => {
     return shouldReverseSections ? sections.reverse() : sections;
   }, [tasks, shouldReverseSections]);
 
-  if (!accountData || isLoadingTasks) {
+  if (!accountData || isLoadingTasks || !tasksAreSorted) {
     return <LoadingScreen />;
   }
 
@@ -79,9 +134,9 @@ const DashboardPage = () => {
 
       <Modal active={modalIsActive} onClose={closeModal}>
         <SortMethodForm
-          initialSortingCriteria="completed"
-          initialSortingOrder="ascending"
-          onChange={handleSortMethodChange}
+          initialCriteria={initialSortingPreferences.criteria}
+          initialOrders={initialSortingPreferences.orders}
+          onChange={applySortingPreferences}
           onSubmit={closeModal}
         />
       </Modal>

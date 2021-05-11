@@ -27,19 +27,13 @@ const checkboxLabels = {
 };
 
 const SortMethodForm = ({
-  initialSortingCriteria,
-  initialSortingOrder,
+  initialCriteria,
+  initialOrders,
   onChange,
   onSubmit,
 }) => {
-  const [sortingCriteria, setSortingCriteria] = useState(
-    initialSortingCriteria,
-  );
-  const [sortingOrders, setSortingOrders] = useState({
-    priority: initialSortingOrder,
-    name: initialSortingOrder,
-    completed: initialSortingOrder,
-  });
+  const [sortingCriteria, setSortingCriteria] = useState(initialCriteria);
+  const [sortingOrders, setSortingOrders] = useState(initialOrders);
 
   const selectAscendingOrder = useCallback(() => {
     setSortingOrders((currentOrders) => ({
@@ -55,13 +49,13 @@ const SortMethodForm = ({
     }));
   }, [sortingCriteria]);
 
-  useEffect(() => {
-    onChange?.(sortingCriteria, sortingOrders[sortingCriteria]);
-  }, [onChange, sortingCriteria, sortingOrders]);
-
   const handleSubmit = useCallback(() => {
     onSubmit?.(sortingCriteria, sortingOrders[sortingCriteria]);
   }, [onSubmit, sortingCriteria, sortingOrders]);
+
+  useEffect(() => {
+    onChange?.(sortingCriteria, sortingOrders);
+  }, [onChange, sortingCriteria, sortingOrders]);
 
   return (
     <Container>
