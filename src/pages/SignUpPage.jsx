@@ -32,20 +32,20 @@ const SignUpPage = ({ navigation }) => {
       </Header>
       <Main>
         <PageTitle>Registre-se</PageTitle>
-        <PageDescription>E gerencie suas tarefas com eficiência</PageDescription>
+        <PageDescription>E gerencie suas tarefas com eficiência!</PageDescription>
 
         <SignUpForm>
           <TwoColumnInputSection>
             <Input 
               label="Nome"
               placeholder="Nome"
-              validate={() => validate.requiredTextField()}
+              validate={validate.requiredTextField}
               twoInput
             />
             <Input 
               label="Sobrenome"
               placeholder="Sobrenome"
-              validate={() => validate.requiredTextField()}
+              validate={validate.requiredTextField}
               twoInput
             />
           </TwoColumnInputSection>

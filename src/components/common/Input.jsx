@@ -24,7 +24,6 @@ const Input = (
     onEndEditing,
     onSubmitEditing,
     containerStyle,
-    twoInput,
     ...inputRestProps
   },
   ref,
