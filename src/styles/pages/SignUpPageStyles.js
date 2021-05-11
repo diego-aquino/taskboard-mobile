@@ -69,6 +69,7 @@ export const TwoColumnInputSection = styled.View`
   display: flex;
   flex: 1;
   flex-direction: row;
+  align-items: flex-start;
   width: 45%;
 `;
 
