@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { CheckMarkIcon } from '~/assets';
 import {
-  CheckMark,
-  CheckMarkButton,
+  Checkbox,
+  CheckboxContainer,
   ClickableArea,
   Container,
   Name,
@@ -45,11 +44,14 @@ const Task = ({
 
   return (
     <Container pressed={isPressed} {...rest}>
-      <CheckMarkButton onPress={toggleCheckedState}>
-        <CheckMark priority={priority} checked={isChecked}>
-          {isChecked && <CheckMarkIcon />}
-        </CheckMark>
-      </CheckMarkButton>
+      <CheckboxContainer onPress={toggleCheckedState}>
+        <Checkbox
+          priority={priority}
+          checked={isChecked}
+          onCheckChange={toggleCheckedState}
+        />
+      </CheckboxContainer>
+
       <Name lineThrough={isChecked} dim={isChecked}>
         {name}
       </Name>

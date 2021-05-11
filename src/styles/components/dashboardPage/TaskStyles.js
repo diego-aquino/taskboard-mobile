@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/native';
 
+import { Checkbox as BaseCheckbox } from '~/components/common';
 import variables from '~/styles/variables';
 
 export const Container = styled.View`
@@ -14,7 +15,7 @@ export const Container = styled.View`
     pressed ? variables.colors.lightWhiteOnHover : variables.colors.white};
 `;
 
-export const CheckMarkButton = styled.TouchableOpacity.attrs({
+export const CheckboxContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 0.6,
 })`
   padding: 10px;
@@ -26,36 +27,13 @@ export const CheckMarkButton = styled.TouchableOpacity.attrs({
   z-index: 1;
 `;
 
-export const CheckMark = styled.View`
-  ${({ priority, checked }) => css`
-    width: 22px;
-    height: 22px;
-    border-radius: 11px;
-    border-width: 2px;
-    border-style: solid;
-
-    ${priority === 'high' &&
-    css`
-      border-color: ${variables.colors.yellow};
-    `}
-
-    ${priority === 'low' &&
-    css`
-      border-color: ${variables.colors.brightBlue};
-    `}
-
-    ${checked &&
-    css`
-      padding: 2px;
-      border: none;
-
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-
-      background-color: ${variables.colors.green};
-    `}
-  `}
+export const Checkbox = styled(BaseCheckbox).attrs(({ priority }) => ({
+  activeOpacity: 0.6,
+  uncheckedColor:
+    priority === 'high' ? variables.colors.yellow : variables.colors.brightBlue,
+}))`
+  width: 22px;
+  height: 22px;
 `;
 
 export const Name = styled.Text`

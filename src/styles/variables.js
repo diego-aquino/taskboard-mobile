@@ -11,7 +11,7 @@ const variables = {
     lightWhiteOnHover: '#d8d8de',
     lightRed: '#ff667a',
     yellow: '#d69e2e',
-    green: '#48bb78',
+    green: '#29B256',
   },
 
   fonts: {
