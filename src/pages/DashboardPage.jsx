@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import {
   ChevronLeftIcon,
@@ -8,9 +8,11 @@ import {
   PlusIcon,
   PreferencesIcon,
 } from '~/assets';
-import { LoadingScreen, Sidebar } from '~/components/common';
+import { LoadingScreen, Modal, Sidebar } from '~/components/common';
+import { SortMethodForm } from '~/components/dashboardPage';
 import { useAccount } from '~/contexts/AccountContext';
 import { useAuth } from '~/contexts/AuthContext';
+import { useTasks } from '~/hooks';
 import { StatusBar } from '~/styles/global';
 import {
   Container,
@@ -33,30 +35,41 @@ import {
   CloseSidebarButton,
 } from '~/styles/pages/DashboardPageStyles';
 
-const UNCOMPLETED_TASKS = [
-  { id: 1, name: 'Task 1', isCompleted: false, priority: 'low' },
-  { id: 2, name: 'Task 2', isCompleted: false, priority: 'high' },
-  { id: 3, name: 'Task 3', isCompleted: false, priority: 'high' },
-  { id: 4, name: 'Task 4', isCompleted: false, priority: 'low' },
-];
-
-const COMPLETED_TASKS = [
-  { id: 5, name: 'Task 5', isCompleted: true, priority: 'high' },
-  { id: 6, name: 'Task 6', isCompleted: true, priority: 'low' },
-  { id: 7, name: 'Task 7', isCompleted: true, priority: 'low' },
-  { id: 8, name: 'Task 8', isCompleted: true, priority: 'low' },
-];
-
 const DashboardPage = () => {
   const { logout } = useAuth();
   const { accountData } = useAccount();
+  const { tasks, isLoading: isLoadingTasks, sortTasks } = useTasks();
 
   const sidebarRef = useRef(null);
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [shouldReverseSections, setShouldReverseSections] = useState(false);
 
   const openSidebar = useCallback(() => sidebarRef.current?.open(), []);
   const closeSidebar = useCallback(() => sidebarRef.current?.close(), []);
 
-  if (!accountData) {
+  const openModal = useCallback(() => setModalIsActive(true), []);
+  const closeModal = useCallback(() => setModalIsActive(false), []);
+
+  const handleSortMethodChange = useCallback(
+    (criteria, order) => {
+      if (criteria === 'completed') {
+        setShouldReverseSections(order !== 'ascending');
+      } else {
+        sortTasks(criteria, order);
+      }
+    },
+    [sortTasks],
+  );
+
+  const taskListSections = useMemo(() => {
+    const sections = [
+      { title: 'Para fazer', data: tasks.uncompleted },
+      { title: 'Completas', data: tasks.completed },
+    ];
+    return shouldReverseSections ? sections.reverse() : sections;
+  }, [tasks, shouldReverseSections]);
+
+  if (!accountData || isLoadingTasks) {
     return <LoadingScreen />;
   }
 
@@ -64,11 +77,20 @@ const DashboardPage = () => {
     <Container>
       <StatusBar variant="light" />
 
+      <Modal active={modalIsActive} onClose={closeModal}>
+        <SortMethodForm
+          initialSortingCriteria="completed"
+          initialSortingOrder="ascending"
+          onChange={handleSortMethodChange}
+          onSubmit={closeModal}
+        />
+      </Modal>
+
       <Header>
         <HeaderButton onPress={openSidebar}>
           <MenuIcon />
         </HeaderButton>
-        <HeaderButton>
+        <HeaderButton onPress={openModal}>
           <PreferencesIcon />
         </HeaderButton>
       </Header>
@@ -101,17 +123,14 @@ const DashboardPage = () => {
         </PageDescription>
 
         <TaskSectionList
-          sections={[
-            { title: 'Para fazer', data: UNCOMPLETED_TASKS },
-            { title: 'Completas', data: COMPLETED_TASKS },
-          ]}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+          sections={taskListSections}
+          keyExtractor={(task) => task.id}
+          renderItem={({ item: task }) => (
             <Task
-              id={item.id}
-              name={item.name}
-              priority={item.priority}
-              checked={item.isCompleted}
+              id={task.id}
+              name={task.name}
+              priority={task.priority}
+              checked={task.isCompleted}
               spaced
             />
           )}

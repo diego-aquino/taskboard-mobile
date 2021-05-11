@@ -1,3 +1,4 @@
+import SortMethodForm from './SortMethodForm';
 import Task from './Task';
 
-export { Task };
+export { Task, SortMethodForm };
