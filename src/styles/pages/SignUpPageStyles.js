@@ -75,7 +75,7 @@ export const TwoColumnInputSection = styled.View`
 
 export const Input = styled(BaseInput).attrs(({ spaced, twoInput }) => ({
   containerStyle: {
-    marginTop: spaced ? 16: 0,
+    marginTop: spaced ? 30: 0,
     marginRight: twoInput ? 30: 0,
   },
 }))``;
