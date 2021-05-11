@@ -5,5 +5,15 @@ import Input from './Input';
 import LoadingScreen from './LoadingScreen';
 import Modal from './Modal';
 import Sidebar from './Sidebar';
+import SwitchButton from './SwitchButton';
 
-export { Alert, Button, Input, Sidebar, LoadingScreen, Modal, Checkbox };
+export {
+  Alert,
+  Button,
+  SwitchButton,
+  Input,
+  Sidebar,
+  LoadingScreen,
+  Modal,
+  Checkbox,
+};
