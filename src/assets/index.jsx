@@ -2,6 +2,7 @@ import AlertIcon from './AlertIcon';
 import ArrowIcon from './ArrowIcon';
 import CheckMarkIcon from './CheckMarkIcon';
 import ChevronLeftIcon from './ChevronLeftIcon';
+import ChevronUpIcon from './ChevronUpIcon';
 import LoadingIcon from './LoadingIcon';
 import Logo from './Logo';
 import LogoutIcon from './LogoutIcon';
@@ -20,4 +21,5 @@ export {
   CheckMarkIcon,
   ChevronLeftIcon,
   LogoutIcon,
+  ChevronUpIcon,
 };

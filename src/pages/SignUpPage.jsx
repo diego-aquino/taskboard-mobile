@@ -55,7 +55,7 @@ const SignUpPage = ({ navigation }) => {
         </PageDescription>
 
         <SignUpForm>
-          <TwoColumnInputSection spaced>
+          <TwoColumnInputSection>
             <Input
               label="Nome"
               placeholder="Nome"

@@ -119,6 +119,7 @@ export const AuthContextProvider = ({ children }) => {
     await Promise.all([
       makeAuthenticatedRequest(accountsServices.logout),
       AsyncStorage.removeItem(storageKeys.REFRESH_TOKEN),
+      AsyncStorage.removeItem(storageKeys.SORTING_PREFERENCES),
     ]);
     setTokens({ accessToken: null, refreshToken: null });
   }, [makeAuthenticatedRequest]);

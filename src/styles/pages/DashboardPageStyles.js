@@ -6,6 +6,7 @@ import variables from '~/styles/variables';
 export const Container = styled.View`
   padding: 24px 24px 0;
   flex: 1;
+  background-color: ${variables.colors.white};
 `;
 
 export const Header = styled.View`

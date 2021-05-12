@@ -1,7 +1,19 @@
 import Alert from './Alert';
 import Button from './Button';
+import Checkbox from './Checkbox';
 import Input from './Input';
 import LoadingScreen from './LoadingScreen';
+import Modal from './Modal';
 import Sidebar from './Sidebar';
+import SwitchButton from './SwitchButton';
 
-export { Alert, Button, Input, Sidebar, LoadingScreen };
+export {
+  Alert,
+  Button,
+  SwitchButton,
+  Input,
+  Sidebar,
+  LoadingScreen,
+  Modal,
+  Checkbox,
+};
