@@ -9,7 +9,7 @@ import {
   Container,
   SortingOrderContainer,
   Title,
-} from '~/styles/components/dashboardPage/SortMethodForm';
+} from '~/styles/components/dashboardPage/SortMethodFormStyles';
 
 const sortingCriteriaOptions = [
   { label: 'Prioridade', name: 'priority' },

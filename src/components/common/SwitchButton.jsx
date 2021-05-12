@@ -4,7 +4,7 @@ import {
   Container,
   Option,
   OptionLabel,
-} from '~/styles/components/common/SwitchButton';
+} from '~/styles/components/common/SwitchButtonStyles';
 
 const SwitchButton = ({ options = [], selectedOptionName, onChange }) => (
   <Container>
