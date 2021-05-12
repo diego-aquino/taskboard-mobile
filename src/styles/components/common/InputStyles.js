@@ -29,8 +29,6 @@ export const Label = styled.Text`
 export const TextInput = styled.TextInput.attrs({
   placeholderTextColor: variables.colors.lightBlueDim,
 })`
-  border-radius: ${variables.borderRadius}px;
-
   color: ${variables.colors.darkBlue};
   font-size: 16px;
 
@@ -39,9 +37,9 @@ export const TextInput = styled.TextInput.attrs({
     css`
       margin-top: 6px;
       padding: 6px 12px;
-
       border: 1px solid
         ${focused ? variables.colors.brightBlue : variables.colors.lightBlueDim};
+      border-radius: ${variables.borderRadius}px;
     `}
 
   ${({ variant, focused }) =>

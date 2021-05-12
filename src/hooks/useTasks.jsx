@@ -46,7 +46,7 @@ function useTasks() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !isLoading) return;
 
     const splitTasksByCompletionStatus = (baseTasks) =>
       baseTasks.reduce(
@@ -62,23 +62,21 @@ function useTasks() {
       );
 
     const loadTasks = async () => {
-      setIsLoading(true);
-
       const listedTasks = await makeAuthenticatedRequest(tasksServices.list);
       const { completed, uncompleted } = splitTasksByCompletionStatus(
         listedTasks,
       );
       setTasks({ completed, uncompleted });
+      setIsLoading(false);
     };
 
     loadTasks();
-  }, [isAuthenticated, makeAuthenticatedRequest]);
+  }, [isAuthenticated, isLoading, makeAuthenticatedRequest]);
 
   useEffect(() => {
-    if (!isLoading) return;
+    if (isLoading) return;
     sortTasks();
-    setIsLoading(false);
-  }, [tasks, isLoading, sortTasks]);
+  }, [isLoading, sortTasks, sortingCriteria, sortingOrders]);
 
   const sortTasks = useCallback(() => {
     const sort = getSortingFunction(sortingCriteria);
