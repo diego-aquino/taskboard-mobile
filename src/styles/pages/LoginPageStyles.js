@@ -9,13 +9,13 @@ export const Container = styled.ScrollView.attrs({
     paddingTop: 16,
     flexGrow: 1,
     justifyContent: 'space-between',
+    backgroundColor: variables.colors.white,
   },
 })``;
 
 export const Header = styled.View`
   width: 100%;
   padding: 0 24px;
-  margin-top: 16px;
 
   flex-direction: row;
   align-items: center;
