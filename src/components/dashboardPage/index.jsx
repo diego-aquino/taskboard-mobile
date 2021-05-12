@@ -1,4 +1,5 @@
-import SortMethodForm from './SortMethodForm';
+import SortingMethodForm from './SortingMethodForm';
 import Task from './Task';
+import TaskForm from './TaskForm';
 
-export { Task, SortMethodForm };
+export { Task, SortingMethodForm, TaskForm };
