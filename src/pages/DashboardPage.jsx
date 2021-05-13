@@ -61,6 +61,7 @@ const DashboardPage = () => {
     sortingOrders,
     setSortingOrders,
     createTask,
+    editTask,
   } = useTasks();
 
   const sidebarRef = useRef(null);
@@ -74,8 +75,8 @@ const DashboardPage = () => {
   const [preferencesModalIsActive, setPreferencesModalIsActive] = useState(
     false,
   );
-  const taskFormRef = useRef(null);
-  const [taskFormModalIsActive, setTaskFormModalIsActive] = useState(false);
+  const [taskModalIsActive, setTaskModalIsActive] = useState(false);
+  const [taskBeingEdited, setTaskBeingEdited] = useState(null);
 
   const openSortingPreferencesModal = useCallback(() => {
     setPreferencesModalIsActive(true);
@@ -85,22 +86,48 @@ const DashboardPage = () => {
     setPreferencesModalIsActive(false);
   }, []);
 
-  const openTaskFormModal = useCallback(() => {
-    setTaskFormModalIsActive(true);
+  const openTaskCreationModal = useCallback(() => {
+    setTaskBeingEdited(null);
+    setTaskModalIsActive(true);
   }, []);
 
-  const closeTaskFormModal = useCallback(() => {
-    taskFormRef.current?.blurInput();
-    setTaskFormModalIsActive(false);
-    taskFormRef.current?.reset();
+  const openTaskEditingModal = useCallback((taskToEdit) => {
+    setTaskBeingEdited(taskToEdit);
+    setTaskModalIsActive(true);
+  }, []);
+
+  const closeTaskModal = useCallback(() => {
+    setTaskModalIsActive(false);
+    setTaskBeingEdited(null);
   }, []);
 
   const handleTaskCreation = useCallback(
     ({ name, priority }) => {
-      closeTaskFormModal();
+      closeTaskModal();
       createTask({ name, priority });
     },
-    [closeTaskFormModal, createTask],
+    [closeTaskModal, createTask],
+  );
+
+  const handleTaskEditing = useCallback(
+    ({ id, name, priority, isChecked: isCompleted }) => {
+      closeTaskModal();
+
+      const taskId = taskBeingEdited?.id ?? id;
+
+      const fieldsToUpdate = { name, priority, isCompleted };
+      const nonUndefinedFieldsToUpdate = Object.keys(fieldsToUpdate).reduce(
+        (accumulated, fieldName) =>
+          fieldsToUpdate[fieldName] === undefined
+            ? accumulated
+            : { ...accumulated, [fieldName]: fieldsToUpdate[fieldName] },
+        {},
+      );
+
+      editTask(taskId, nonUndefinedFieldsToUpdate);
+      setTaskBeingEdited(null);
+    },
+    [closeTaskModal, editTask, taskBeingEdited],
   );
 
   const applySortingPreferences = useCallback(
@@ -160,6 +187,7 @@ const DashboardPage = () => {
       <Modal
         active={preferencesModalIsActive}
         onClose={closeSortingPreferencesModal}
+        unmountChildrenWhenInactive={false}
       >
         <SortingMethodForm
           initialCriteria={sortingCriteria}
@@ -169,8 +197,13 @@ const DashboardPage = () => {
         />
       </Modal>
 
-      <Modal active={taskFormModalIsActive} onClose={closeTaskFormModal}>
-        <TaskForm ref={taskFormRef} onSubmit={handleTaskCreation} />
+      <Modal active={taskModalIsActive} onClose={closeTaskModal}>
+        <TaskForm
+          initialName={taskBeingEdited?.name ?? ''}
+          initialPriority={taskBeingEdited?.priority ?? 'low'}
+          submitButtonLabel={taskBeingEdited ? 'Editar tarefa' : 'Criar tarefa'}
+          onSubmit={taskBeingEdited ? handleTaskEditing : handleTaskCreation}
+        />
       </Modal>
 
       <Header>
@@ -218,6 +251,8 @@ const DashboardPage = () => {
               name={task.name}
               priority={task.priority}
               checked={task.isCompleted}
+              onTaskPress={openTaskEditingModal}
+              onCheck={handleTaskEditing}
               spaced
             />
           )}
@@ -228,7 +263,7 @@ const DashboardPage = () => {
         />
       </Main>
 
-      <AddTaskButton onPress={openTaskFormModal}>
+      <AddTaskButton onPress={openTaskCreationModal}>
         <PlusIcon />
       </AddTaskButton>
     </Container>

@@ -31,12 +31,9 @@ const Task = ({
   );
 
   const toggleCheckedState = useCallback(() => {
-    setIsChecked((currentCheckedState) => {
-      const newCheckedState = !currentCheckedState;
-      onCheck?.({ ...taskData, isChecked: newCheckedState });
-      return newCheckedState;
-    });
-  }, [onCheck, taskData]);
+    setIsChecked((checkedState) => !checkedState);
+    onCheck?.({ ...taskData, isChecked: !isChecked });
+  }, [onCheck, taskData, isChecked]);
 
   const handleTaskPress = useCallback(() => {
     onTaskPress?.(taskData);

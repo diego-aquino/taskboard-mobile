@@ -115,17 +115,47 @@ function useTasks() {
       const ascending = currentOrder === 'ascending';
 
       setTasks(({ completed, uncompleted }) => {
-        const updateIfTaskBeingEdited = (task) => {
-          const isTaskBeingEdited = task.id === taskId;
-          return isTaskBeingEdited ? { ...task, ...newTaskData } : task;
-        };
+        const isTaskBeingEdited = (task) => task.id === taskId;
 
-        const updatedCompleted = completed.map(updateIfTaskBeingEdited);
-        const updatedUncompleted = uncompleted.map(updateIfTaskBeingEdited);
+        const taskBeingEdited =
+          completed.find(isTaskBeingEdited) ??
+          uncompleted.find(isTaskBeingEdited);
+
+        const completionStatusIsUnchanged =
+          newTaskData.isCompleted === undefined ||
+          newTaskData.isCompleted === taskBeingEdited.isCompleted;
+
+        const updatedTask = { ...taskBeingEdited, ...newTaskData };
+
+        if (completionStatusIsUnchanged) {
+          const updateTaskIfBeingEdited = (task) =>
+            task.id === taskId ? updatedTask : task;
+
+          const newCompletedList = taskBeingEdited.isCompleted
+            ? sort(completed.map(updateTaskIfBeingEdited), ascending)
+            : completed;
+          const newUncompletedList = !taskBeingEdited.isCompleted
+            ? sort(uncompleted.map(updateTaskIfBeingEdited), ascending)
+            : uncompleted;
+
+          return {
+            completed: newCompletedList,
+            uncompleted: newUncompletedList,
+          };
+        }
+
+        const isNotTaskBeingEdited = (task) => task.id !== taskId;
+
+        const newCompletedList = updatedTask.isCompleted
+          ? sort([...completed, updatedTask], ascending)
+          : completed.filter(isNotTaskBeingEdited);
+        const newUncompletedList = !updatedTask.isCompleted
+          ? sort([...uncompleted, updatedTask], ascending)
+          : uncompleted.filter(isNotTaskBeingEdited);
 
         return {
-          completed: sort(updatedCompleted, ascending),
-          uncompleted: sort(updatedUncompleted, ascending),
+          completed: newCompletedList,
+          uncompleted: newUncompletedList,
         };
       });
     },
