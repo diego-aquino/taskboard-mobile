@@ -16,7 +16,7 @@ import {
   PreferencesIcon,
 } from '~/assets';
 import { LoadingScreen, Modal, Sidebar } from '~/components/common';
-import { SortMethodForm } from '~/components/dashboardPage';
+import { SortingMethodForm, TaskForm } from '~/components/dashboardPage';
 import { useAccount } from '~/contexts/AccountContext';
 import { useAuth } from '~/contexts/AuthContext';
 import { useTasks } from '~/hooks';
@@ -43,78 +43,103 @@ import {
 } from '~/styles/pages/DashboardPageStyles';
 import { storageKeys } from '~/utils/local';
 
-const DEFAULT_SORTING_PREFERENCES = {
-  criteria: 'completed',
-  orders: {
-    priority: 'ascending',
-    name: 'ascending',
-    completed: 'ascending',
-  },
+const saveSortingPreferencesLocally = async (criteria, orders) => {
+  await AsyncStorage.setItem(
+    storageKeys.SORTING_PREFERENCES,
+    JSON.stringify({ criteria, orders }),
+  );
 };
 
 const DashboardPage = () => {
   const { logout } = useAuth();
   const { accountData } = useAccount();
-  const { tasks, isLoading: isLoadingTasks, sortTasks } = useTasks();
+  const {
+    tasks,
+    isLoading: isLoadingTasks,
+    sortingCriteria,
+    setSortingCriteria,
+    sortingOrders,
+    setSortingOrders,
+    createTask,
+  } = useTasks();
 
   const sidebarRef = useRef(null);
-  const [modalIsActive, setModalIsActive] = useState(false);
-  const [shouldReverseSections, setShouldReverseSections] = useState(false);
 
   const openSidebar = useCallback(() => sidebarRef.current?.open(), []);
   const closeSidebar = useCallback(() => sidebarRef.current?.close(), []);
 
-  const openModal = useCallback(() => setModalIsActive(true), []);
-  const closeModal = useCallback(() => setModalIsActive(false), []);
+  const [taskListIsReady, setTaskListIsReady] = useState(false);
+  const [shouldReverseSections, setShouldReverseSections] = useState(false);
 
-  const [tasksAreSorted, setTasksAreSorted] = useState(false);
-  const [initialSortingPreferences, setInitialSortingPreferences] = useState(
-    {},
+  const [preferencesModalIsActive, setPreferencesModalIsActive] = useState(
+    false,
   );
+  const taskFormRef = useRef(null);
+  const [taskFormModalIsActive, setTaskFormModalIsActive] = useState(false);
 
-  const saveSortingPreferencesLocally = useCallback(
-    async (criteria, orders) => {
-      await AsyncStorage.setItem(
-        storageKeys.SORTING_PREFERENCES,
-        JSON.stringify({ criteria, orders }),
-      );
+  const openSortingPreferencesModal = useCallback(() => {
+    setPreferencesModalIsActive(true);
+  }, []);
+
+  const closeSortingPreferencesModal = useCallback(() => {
+    setPreferencesModalIsActive(false);
+  }, []);
+
+  const openTaskFormModal = useCallback(() => {
+    setTaskFormModalIsActive(true);
+  }, []);
+
+  const closeTaskFormModal = useCallback(() => {
+    taskFormRef.current?.blurInput();
+    setTaskFormModalIsActive(false);
+    taskFormRef.current?.reset();
+  }, []);
+
+  const handleTaskCreation = useCallback(
+    ({ name, priority }) => {
+      closeTaskFormModal();
+      createTask({ name, priority });
     },
-    [],
+    [closeTaskFormModal, createTask],
   );
 
   const applySortingPreferences = useCallback(
     async (criteria, orders) => {
-      const currentOrder = orders[criteria];
       if (criteria === 'completed') {
+        const currentOrder = orders[criteria];
         setShouldReverseSections(currentOrder !== 'ascending');
       } else {
-        sortTasks(criteria, currentOrder);
+        setSortingCriteria(criteria);
       }
 
+      setSortingOrders(orders);
       await saveSortingPreferencesLocally(criteria, orders);
     },
-    [sortTasks, saveSortingPreferencesLocally],
+    [setSortingCriteria, setSortingOrders],
   );
 
   useEffect(() => {
-    const readLocalSortingPreferences = async () => {
-      const stringifiedPreferences = await AsyncStorage.getItem(
+    if (isLoadingTasks) return;
+
+    const applyLocalSortingPreferences = async () => {
+      const preferences = await AsyncStorage.getItem(
         storageKeys.SORTING_PREFERENCES,
       );
 
-      const { criteria, orders } = stringifiedPreferences
-        ? JSON.parse(stringifiedPreferences)
-        : DEFAULT_SORTING_PREFERENCES;
+      if (preferences) {
+        const { criteria, orders } = JSON.parse(preferences);
+        await applySortingPreferences(criteria, orders);
 
-      await applySortingPreferences(criteria, orders);
+        if (criteria !== 'completed') {
+          setShouldReverseSections(orders.completed !== 'ascending');
+        }
+      }
 
-      setShouldReverseSections(orders.completed !== 'ascending');
-      setInitialSortingPreferences({ criteria, orders });
-      setTasksAreSorted(true);
+      setTaskListIsReady(true);
     };
 
-    readLocalSortingPreferences();
-  }, [applySortingPreferences]);
+    applyLocalSortingPreferences();
+  }, [isLoadingTasks, applySortingPreferences]);
 
   const taskListSections = useMemo(() => {
     const sections = [
@@ -124,7 +149,7 @@ const DashboardPage = () => {
     return shouldReverseSections ? sections.reverse() : sections;
   }, [tasks, shouldReverseSections]);
 
-  if (!accountData || isLoadingTasks || !tasksAreSorted) {
+  if (!accountData || isLoadingTasks || !taskListIsReady) {
     return <LoadingScreen />;
   }
 
@@ -132,20 +157,27 @@ const DashboardPage = () => {
     <Container>
       <StatusBar variant="light" />
 
-      <Modal active={modalIsActive} onClose={closeModal}>
-        <SortMethodForm
-          initialCriteria={initialSortingPreferences.criteria}
-          initialOrders={initialSortingPreferences.orders}
+      <Modal
+        active={preferencesModalIsActive}
+        onClose={closeSortingPreferencesModal}
+      >
+        <SortingMethodForm
+          initialCriteria={sortingCriteria}
+          initialOrders={sortingOrders}
           onChange={applySortingPreferences}
-          onSubmit={closeModal}
+          onSubmit={closeSortingPreferencesModal}
         />
+      </Modal>
+
+      <Modal active={taskFormModalIsActive} onClose={closeTaskFormModal}>
+        <TaskForm ref={taskFormRef} onSubmit={handleTaskCreation} />
       </Modal>
 
       <Header>
         <HeaderButton onPress={openSidebar}>
           <MenuIcon />
         </HeaderButton>
-        <HeaderButton onPress={openModal}>
+        <HeaderButton onPress={openSortingPreferencesModal}>
           <PreferencesIcon />
         </HeaderButton>
       </Header>
@@ -196,7 +228,7 @@ const DashboardPage = () => {
         />
       </Main>
 
-      <AddTaskButton onPress={() => {}}>
+      <AddTaskButton onPress={openTaskFormModal}>
         <PlusIcon />
       </AddTaskButton>
     </Container>

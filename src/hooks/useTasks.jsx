@@ -38,15 +38,18 @@ function useTasks() {
   const [tasks, setTasks] = useState({ completed: [], uncompleted: [] });
   const [isLoading, setIsLoading] = useState(true);
 
+  const [sortingCriteria, setSortingCriteria] = useState('completed');
+  const [sortingOrders, setSortingOrders] = useState({
+    priority: 'ascending',
+    name: 'ascending',
+    completed: 'ascending',
+  });
+
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !isLoading) return;
 
-    (async () => {
-      setIsLoading(true);
-
-      const requestedTasks = await makeAuthenticatedRequest(tasksServices.list);
-
-      const { completed, uncompleted } = requestedTasks.reduce(
+    const splitTasksByCompletionStatus = (baseTasks) =>
+      baseTasks.reduce(
         (accumulated, task) => {
           if (task.isCompleted) {
             accumulated.completed.push(task);
@@ -58,78 +61,97 @@ function useTasks() {
         { completed: [], uncompleted: [] },
       );
 
+    const loadTasks = async () => {
+      const listedTasks = await makeAuthenticatedRequest(tasksServices.list);
+      const { completed, uncompleted } = splitTasksByCompletionStatus(
+        listedTasks,
+      );
       setTasks({ completed, uncompleted });
       setIsLoading(false);
-    })();
-  }, [isAuthenticated, makeAuthenticatedRequest]);
+    };
 
-  const sortTasks = useCallback((criteria, order) => {
-    const ascending = order === 'ascending';
-    const sort = getSortingFunction(criteria);
+    loadTasks();
+  }, [isAuthenticated, isLoading, makeAuthenticatedRequest]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    sortTasks();
+  }, [isLoading, sortTasks, sortingCriteria, sortingOrders]);
+
+  const sortTasks = useCallback(() => {
+    const sort = getSortingFunction(sortingCriteria);
+    const currentOrder = sortingOrders[sortingCriteria];
+    const ascending = currentOrder === 'ascending';
 
     setTasks(({ completed, uncompleted }) => ({
       completed: sort(completed, ascending),
       uncompleted: sort(uncompleted, ascending),
     }));
-  }, []);
+  }, [sortingCriteria, sortingOrders]);
 
-  const insertSortedTask = useCallback((newTask, criteria, order) => {
-    const ascending = order === 'ascending';
+  const insertSortedTask = useCallback(
+    (newTask) => {
+      const sort = getSortingFunction(sortingCriteria);
+      const currentOrder = sortingOrders[sortingCriteria];
+      const ascending = currentOrder === 'ascending';
 
-    setTasks(({ completed, uncompleted }) => {
-      const sort = getSortingFunction(criteria);
+      setTasks(({ completed, uncompleted }) => {
+        if (newTask.isCompleted) {
+          const newCompletedList = sort([...completed, newTask], ascending);
+          return { completed: newCompletedList, uncompleted };
+        }
 
-      if (newTask.isCompleted) {
-        const newCompleted = sort([...completed, newTask], ascending);
-        return { completed: newCompleted, uncompleted };
-      }
+        const newUncompletedList = sort([...uncompleted, newTask], ascending);
+        return { completed, uncompleted: newUncompletedList };
+      });
+    },
+    [sortingCriteria, sortingOrders],
+  );
 
-      const newUncompleted = sort([...uncompleted, newTask], ascending);
-      return { completed, uncompleted: newUncompleted };
-    });
-  }, []);
+  const editSortedTask = useCallback(
+    (taskId, newTaskData) => {
+      const sort = getSortingFunction(sortingCriteria);
+      const currentOrder = sortingOrders[sortingCriteria];
+      const ascending = currentOrder === 'ascending';
 
-  const editSortedTask = useCallback((taskId, newTaskData, criteria, order) => {
-    const ascending = order === 'ascending';
+      setTasks(({ completed, uncompleted }) => {
+        const updateIfTaskBeingEdited = (task) => {
+          const isTaskBeingEdited = task.id === taskId;
+          return isTaskBeingEdited ? { ...task, ...newTaskData } : task;
+        };
 
-    setTasks(({ completed, uncompleted }) => {
-      const sort = getSortingFunction(criteria);
-      const updateIfTaskBeingEdited = (task) => {
-        const isTaskBeingEdited = task.id === taskId;
-        return isTaskBeingEdited ? { ...task, ...newTaskData } : task;
-      };
+        const updatedCompleted = completed.map(updateIfTaskBeingEdited);
+        const updatedUncompleted = uncompleted.map(updateIfTaskBeingEdited);
 
-      const updatedCompleted = completed.map(updateIfTaskBeingEdited);
-      const updatedUncompleted = uncompleted.map(updateIfTaskBeingEdited);
-
-      return {
-        completed: sort(updatedCompleted, ascending),
-        uncompleted: sort(updatedUncompleted, ascending),
-      };
-    });
-  }, []);
+        return {
+          completed: sort(updatedCompleted, ascending),
+          uncompleted: sort(updatedUncompleted, ascending),
+        };
+      });
+    },
+    [sortingCriteria, sortingOrders],
+  );
 
   const createTask = useCallback(
-    async ({ name, priority }, { sortingCriteria, sortingOrder }) => {
+    async ({ name, priority }) => {
       if (!isAuthenticated) return;
 
       const createdTask = await makeAuthenticatedRequest((accessToken) =>
         tasksServices.create(accessToken, { name, priority }),
       );
-      insertSortedTask(createdTask, sortingCriteria, sortingOrder);
+      insertSortedTask(createdTask);
     },
     [isAuthenticated, makeAuthenticatedRequest, insertSortedTask],
   );
 
   const editTask = useCallback(
-    (taskId, newTaskData, { sortingCriteria, sortingOrder }) => {
+    (taskId, newTaskData) => {
       if (!isAuthenticated) return;
 
       makeAuthenticatedRequest((accessToken) =>
         tasksServices.edit(accessToken, taskId, newTaskData),
       );
-
-      editSortedTask(taskId, newTaskData, sortingCriteria, sortingOrder);
+      editSortedTask(taskId, newTaskData);
     },
     [editSortedTask, isAuthenticated, makeAuthenticatedRequest],
   );
@@ -152,7 +174,18 @@ function useTasks() {
     [isAuthenticated, makeAuthenticatedRequest],
   );
 
-  return { tasks, isLoading, sortTasks, createTask, editTask, removeTask };
+  return {
+    tasks,
+    isLoading,
+    sortingCriteria,
+    setSortingCriteria,
+    sortingOrders,
+    setSortingOrders,
+    sortTasks,
+    createTask,
+    editTask,
+    removeTask,
+  };
 }
 
 export default useTasks;

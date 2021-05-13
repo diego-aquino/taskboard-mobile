@@ -5,6 +5,7 @@ import Input from './Input';
 import LoadingScreen from './LoadingScreen';
 import Modal from './Modal';
 import Sidebar from './Sidebar';
+import SingleChoiceCheckboxesInput from './SingleChoiceCheckboxesInput';
 import SwitchButton from './SwitchButton';
 
 export {
@@ -16,4 +17,5 @@ export {
   LoadingScreen,
   Modal,
   Checkbox,
+  SingleChoiceCheckboxesInput,
 };
