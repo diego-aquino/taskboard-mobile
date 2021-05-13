@@ -6,9 +6,17 @@ import {
   Container,
 } from '~/styles/components/common/ModalStyles';
 
-const Modal = ({ active: isActive = false, onClose, children, ...rest }) => (
+const Modal = ({
+  active: isActive = false,
+  unmountChildrenWhenInactive = true,
+  onClose,
+  children,
+  ...rest
+}) => (
   <Container active={isActive} {...rest}>
-    <ChildrenWrapper>{children}</ChildrenWrapper>
+    <ChildrenWrapper>
+      {(isActive || !unmountChildrenWhenInactive) && children}
+    </ChildrenWrapper>
     <ClickableBackground onPress={onClose}>
       <></>
     </ClickableBackground>

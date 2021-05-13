@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ChevronIcon } from '~/assets';
 import { Button, SingleChoiceCheckboxesInput } from '~/components/common';
@@ -19,27 +13,24 @@ const PRIORITY_OPTIONS = [
   { value: 'low', icon: <ChevronIcon direction="down" />, label: 'Baixa' },
 ];
 
-const TaskForm = (
-  { initialName = '', initialPriority = 'low', onSubmit },
-  ref,
-) => {
+const TaskForm = ({
+  initialName = '',
+  initialPriority = 'low',
+  submitButtonLabel,
+  onSubmit,
+  ...rest
+}) => {
   const nameInputRef = useRef(initialName);
   const [priority, setPriority] = useState(initialPriority);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      reset: () => {
-        setPriority(initialPriority);
+  useEffect(() => {
+    if (!nameInputRef.current) return;
+    nameInputRef.current.value = initialName;
+  }, [initialName]);
 
-        if (!nameInputRef.current) return;
-        nameInputRef.current.value = initialName;
-        nameInputRef.current.clearAlert();
-      },
-      blurInput: () => nameInputRef.current?.blur(),
-    }),
-    [initialName, initialPriority],
-  );
+  useEffect(() => {
+    setPriority(initialPriority);
+  }, [initialPriority]);
 
   const handleSubmit = useCallback(async () => {
     const nameIsValid = await nameInputRef.current?.validate();
@@ -52,7 +43,7 @@ const TaskForm = (
   }, [onSubmit, priority]);
 
   return (
-    <Container>
+    <Container {...rest}>
       <Input
         ref={nameInputRef}
         variant="outline"
@@ -65,9 +56,9 @@ const TaskForm = (
         options={PRIORITY_OPTIONS}
         onChange={setPriority}
       />
-      <Button label="Criar" onPress={handleSubmit} />
+      <Button label={submitButtonLabel} onPress={handleSubmit} />
     </Container>
   );
 };
 
-export default forwardRef(TaskForm);
+export default TaskForm;
