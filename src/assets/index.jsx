@@ -9,6 +9,7 @@ import LogoutIcon from './LogoutIcon';
 import MenuIcon from './MenuIcon';
 import PlusIcon from './PlusIcon';
 import PreferencesIcon from './PreferencesIcon';
+import TrashIcon from './TrashIcon';
 
 export {
   AlertIcon,
@@ -22,4 +23,5 @@ export {
   ChevronLeftIcon,
   LogoutIcon,
   ChevronIcon,
+  TrashIcon,
 };

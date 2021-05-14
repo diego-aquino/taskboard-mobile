@@ -62,6 +62,7 @@ const DashboardPage = () => {
     setSortingOrders,
     createTask,
     editTask,
+    removeTask,
   } = useTasks();
 
   const sidebarRef = useRef(null);
@@ -129,6 +130,12 @@ const DashboardPage = () => {
     },
     [closeTaskModal, editTask, taskBeingEdited],
   );
+
+  const handleTaskRemoval = useCallback(() => {
+    closeTaskModal();
+    if (!taskBeingEdited) return;
+    removeTask(taskBeingEdited.id);
+  }, [closeTaskModal, removeTask, taskBeingEdited]);
 
   const applySortingPreferences = useCallback(
     async (criteria, orders) => {
@@ -203,6 +210,9 @@ const DashboardPage = () => {
           initialPriority={taskBeingEdited?.priority ?? 'low'}
           submitButtonLabel={taskBeingEdited ? 'Editar tarefa' : 'Criar tarefa'}
           onSubmit={taskBeingEdited ? handleTaskEditing : handleTaskCreation}
+          onRemoveTask={handleTaskRemoval}
+          showRemoveButton={!!taskBeingEdited}
+          autoFocusInput={!taskBeingEdited}
         />
       </Modal>
 

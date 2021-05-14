@@ -10,6 +10,7 @@ const variables = {
     whiteOnHover: '#c6c7cf',
     lightWhiteOnHover: '#d8d8de',
     lightRed: '#ff667a',
+    lightRedDim: '#ff667a15',
     yellow: '#d69e2e',
     green: '#29B256',
   },
