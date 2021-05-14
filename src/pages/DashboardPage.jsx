@@ -15,7 +15,7 @@ import {
   PlusIcon,
   PreferencesIcon,
 } from '~/assets';
-import { LoadingScreen, Modal, Sidebar } from '~/components/common';
+import { LoadingScreen, Message, Modal, Sidebar } from '~/components/common';
 import { SortingMethodForm, TaskForm } from '~/components/dashboardPage';
 import { useAccount } from '~/contexts/AccountContext';
 import { useAuth } from '~/contexts/AuthContext';
@@ -62,6 +62,7 @@ const DashboardPage = () => {
     setSortingOrders,
     createTask,
     editTask,
+    removeTask,
   } = useTasks();
 
   const sidebarRef = useRef(null);
@@ -77,6 +78,9 @@ const DashboardPage = () => {
   );
   const [taskModalIsActive, setTaskModalIsActive] = useState(false);
   const [taskBeingEdited, setTaskBeingEdited] = useState(null);
+
+  const lastTaskRemoved = useRef(null);
+  const [messageText, setMessageText] = useState(null);
 
   const openSortingPreferencesModal = useCallback(() => {
     setPreferencesModalIsActive(true);
@@ -129,6 +133,25 @@ const DashboardPage = () => {
     },
     [closeTaskModal, editTask, taskBeingEdited],
   );
+
+  const handleTaskRemoval = useCallback(() => {
+    if (!taskBeingEdited) return;
+    lastTaskRemoved.current = taskBeingEdited;
+    removeTask(taskBeingEdited.id);
+
+    setMessageText('Tarefa removida.');
+    closeTaskModal();
+  }, [closeTaskModal, removeTask, taskBeingEdited]);
+
+  const hideMessage = useCallback(() => {
+    setMessageText(null);
+  }, []);
+
+  const recreateLastRemovedTask = useCallback(() => {
+    if (!lastTaskRemoved.current) return;
+    createTask(lastTaskRemoved.current);
+    hideMessage();
+  }, [createTask, hideMessage]);
 
   const applySortingPreferences = useCallback(
     async (criteria, orders) => {
@@ -203,6 +226,9 @@ const DashboardPage = () => {
           initialPriority={taskBeingEdited?.priority ?? 'low'}
           submitButtonLabel={taskBeingEdited ? 'Editar tarefa' : 'Criar tarefa'}
           onSubmit={taskBeingEdited ? handleTaskEditing : handleTaskCreation}
+          onRemoveTask={handleTaskRemoval}
+          showRemoveButton={!!taskBeingEdited}
+          autoFocusInput={!taskBeingEdited}
         />
       </Modal>
 
@@ -266,6 +292,14 @@ const DashboardPage = () => {
       <AddTaskButton onPress={openTaskCreationModal}>
         <PlusIcon />
       </AddTaskButton>
+
+      <Message
+        text={messageText}
+        actionButtonLabel="Desfazer"
+        onActionButtonPress={recreateLastRemovedTask}
+        closeAfterDelay={5000}
+        onClose={hideMessage}
+      />
     </Container>
   );
 };

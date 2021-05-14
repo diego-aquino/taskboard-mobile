@@ -4,7 +4,10 @@ import { ChevronIcon } from '~/assets';
 import { Button, SingleChoiceCheckboxesInput } from '~/components/common';
 import {
   Container,
+  FirstLineContainer,
   Input,
+  RemoveTaskButton,
+  TrashIcon,
 } from '~/styles/components/dashboardPage/TaskFormStyles';
 import validate from '~/utils/validation';
 
@@ -17,11 +20,16 @@ const TaskForm = ({
   initialName = '',
   initialPriority = 'low',
   submitButtonLabel,
+  showRemoveButton,
+  autoFocusInput,
+  onRemoveTask,
   onSubmit,
   ...rest
 }) => {
   const nameInputRef = useRef(initialName);
   const [priority, setPriority] = useState(initialPriority);
+
+  const [removeButtonIsPressed, setRemoveButtonIsPressed] = useState(false);
 
   useEffect(() => {
     if (!nameInputRef.current) return;
@@ -44,13 +52,27 @@ const TaskForm = ({
 
   return (
     <Container {...rest}>
-      <Input
-        ref={nameInputRef}
-        variant="outline"
-        initialValue={initialName}
-        placeholder="Nome..."
-        validate={validate.requiredTextField}
-      />
+      <FirstLineContainer>
+        <Input
+          ref={nameInputRef}
+          variant="outline"
+          initialValue={initialName}
+          placeholder="Nome..."
+          validate={validate.requiredTextField}
+          fullWidth={!showRemoveButton}
+          autoFocus={autoFocusInput}
+        />
+        {showRemoveButton && (
+          <RemoveTaskButton
+            onPress={onRemoveTask}
+            onPressIn={() => setRemoveButtonIsPressed(true)}
+            onPressOut={() => setRemoveButtonIsPressed(false)}
+          >
+            <TrashIcon active={removeButtonIsPressed} />
+          </RemoveTaskButton>
+        )}
+      </FirstLineContainer>
+
       <SingleChoiceCheckboxesInput
         value={priority}
         options={PRIORITY_OPTIONS}
