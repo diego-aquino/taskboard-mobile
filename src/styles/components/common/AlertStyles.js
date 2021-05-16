@@ -13,6 +13,8 @@ export const AlertIcon = styled(BaseAlertIcon)`
 `;
 
 export const Message = styled.Text`
+  flex-shrink: 1;
+
   color: ${variables.colors.lightRed};
   font-family: ${variables.fonts.medium};
   font-size: 14px;

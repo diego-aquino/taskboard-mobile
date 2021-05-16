@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components/native';
 
 import { ArrowIcon as BaseArrowIcon } from '~/assets';
-import { Button, Input as BaseInput } from '~/components/common';
+import { Alert, Button, Input as BaseInput } from '~/components/common';
 import variables from '~/styles/variables';
 
 export const Container = styled.ScrollView.attrs({
@@ -93,6 +93,11 @@ export const PageDescription = styled.Text`
   margin-bottom: 36px;
   color: ${variables.colors.lightBlue};
   font-size: 18px;
+`;
+
+export const GlobalAlert = styled(Alert)`
+  margin-top: 24px;
+  justify-content: center;
 `;
 
 export const Footer = styled.View`
