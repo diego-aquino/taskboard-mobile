@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "taskboard-mobile",
-    "slug": "taskboard-mobile",
+    "name": "taskboard",
+    "slug": "taskboard",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "icon": "./assets/adaptive-icon-with-background.png",
       "package": "com.taskboard.taskboard"
     },
     "web": {
