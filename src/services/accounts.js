@@ -1,6 +1,13 @@
 import api from '~/api';
 
 const accountsServices = {
+  async signUp(accountData) {
+    const signUpResponse = await api.post('/accounts/signup', accountData);
+    const signUpData = signUpResponse.data;
+
+    return signUpData;
+  },
+
   async login(email, password) {
     const loginCredentials = { email, password };
     const loginResponse = await api.post('/accounts/login', loginCredentials);
