@@ -20,6 +20,7 @@ const Input = (
     variant = 'normal',
     initialValue = '',
     onChangeText,
+    onBlur,
     onEndEditing,
     onSubmitEditing,
     containerStyle,
@@ -89,8 +90,17 @@ const Input = (
     setIsFocused(true);
   }, []);
 
+  const handleBlur = useCallback(
+    (event) => {
+      setIsFocused(false);
+      executeValidation();
+      onBlur?.(event);
+    },
+    [executeValidation, onBlur],
+  );
+
   const handleEndEditing = useCallback(
-    async (event) => {
+    (event) => {
       setIsFocused(false);
       executeValidation();
       onEndEditing?.(event);
@@ -99,7 +109,7 @@ const Input = (
   );
 
   const handleSubmitEditing = useCallback(
-    async (event) => {
+    (event) => {
       setIsFocused(false);
       executeValidation();
       onSubmitEditing?.(event);
@@ -123,6 +133,7 @@ const Input = (
         withAlert={!!alertMessage}
         onFocus={handleFocus}
         onChangeText={handleTextChange}
+        onBlur={handleBlur}
         onEndEditing={handleEndEditing}
         onSubmitEditing={handleSubmitEditing}
         {...inputRestProps}
