@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import React, {
   createContext,
   useCallback,
@@ -48,7 +49,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const refreshToken =
       tokens.refreshToken ||
-      (await AsyncStorage.getItem(storageKeys.REFRESH_TOKEN));
+      (await SecureStore.getItemAsync(storageKeys.REFRESH_TOKEN));
 
     if (!refreshToken) {
       setIsLoading(false);
@@ -59,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const accessToken = await accountsServices.token(refreshToken);
       setTokens({ accessToken, refreshToken });
-      await AsyncStorage.setItem(storageKeys.REFRESH_TOKEN, refreshToken);
+      await SecureStore.setItemAsync(storageKeys.REFRESH_TOKEN, refreshToken);
     } catch {
       // eslint-disable-line no-empty
     } finally {
@@ -110,7 +111,7 @@ export const AuthContextProvider = ({ children }) => {
       const { accessToken, refreshToken } = responseData;
 
       setTokens({ accessToken, refreshToken });
-      await AsyncStorage.setItem(storageKeys.REFRESH_TOKEN, refreshToken);
+      await SecureStore.setItemAsync(storageKeys.REFRESH_TOKEN, refreshToken);
     },
     [setTokens],
   );
@@ -118,7 +119,7 @@ export const AuthContextProvider = ({ children }) => {
   const logout = useCallback(async () => {
     await Promise.all([
       makeAuthenticatedRequest(accountsServices.logout),
-      AsyncStorage.removeItem(storageKeys.REFRESH_TOKEN),
+      SecureStore.deleteItemAsync(storageKeys.REFRESH_TOKEN),
       AsyncStorage.removeItem(storageKeys.SORTING_PREFERENCES),
     ]);
     setTokens({ accessToken: null, refreshToken: null });

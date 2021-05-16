@@ -50,6 +50,14 @@ const saveSortingPreferencesLocally = async (criteria, orders) => {
   );
 };
 
+const readLocalSortingPreferences = async () => {
+  const preferences = await AsyncStorage.getItem(
+    storageKeys.SORTING_PREFERENCES,
+  );
+
+  return preferences ? JSON.parse(preferences) : null;
+};
+
 const DashboardPage = () => {
   const { logout } = useAuth();
   const { accountData } = useAccount();
@@ -172,12 +180,10 @@ const DashboardPage = () => {
     if (isLoadingTasks) return;
 
     const applyLocalSortingPreferences = async () => {
-      const preferences = await AsyncStorage.getItem(
-        storageKeys.SORTING_PREFERENCES,
-      );
+      const preferences = await readLocalSortingPreferences();
 
       if (preferences) {
-        const { criteria, orders } = JSON.parse(preferences);
+        const { criteria, orders } = preferences;
         await applySortingPreferences(criteria, orders);
 
         if (criteria !== 'completed') {
