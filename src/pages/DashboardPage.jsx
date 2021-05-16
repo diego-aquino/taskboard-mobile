@@ -31,6 +31,7 @@ import {
   TaskSectionList,
   TaskSectionTitle,
   Task,
+  EmptyTaskSectionText,
   SpacingBetweenSections,
   AddTaskButton,
   SidebarHeader,
@@ -199,8 +200,8 @@ const DashboardPage = () => {
 
   const taskListSections = useMemo(() => {
     const sections = [
-      { title: 'Para fazer', data: tasks.uncompleted },
-      { title: 'Completas', data: tasks.completed },
+      { id: 'uncompleted', title: 'Para fazer', data: tasks.uncompleted },
+      { id: 'completed', title: 'Completas', data: tasks.completed },
     ];
     return shouldReverseSections ? sections.reverse() : sections;
   }, [tasks, shouldReverseSections]);
@@ -291,7 +292,17 @@ const DashboardPage = () => {
           renderSectionHeader={({ section }) => (
             <TaskSectionTitle>{section.title.toUpperCase()}</TaskSectionTitle>
           )}
-          renderSectionFooter={() => <SpacingBetweenSections />}
+          renderSectionFooter={({ section }) => (
+            <>
+              {section.data.length === 0 && (
+                <EmptyTaskSectionText>
+                  Sem tarefas{' '}
+                  {section.id === 'completed' ? 'completas' : 'para fazer'}
+                </EmptyTaskSectionText>
+              )}
+              <SpacingBetweenSections />
+            </>
+          )}
         />
       </Main>
 

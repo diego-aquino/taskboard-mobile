@@ -90,6 +90,15 @@ export const Task = styled(BaseTask)`
   margin-bottom: ${({ spaced }) => (spaced ? '8px' : 0)};
 `;
 
+export const EmptyTaskSectionText = styled.Text`
+  color: ${variables.colors.lightBlue};
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+
+  opacity: 0.8;
+`;
+
 export const SpacingBetweenSections = styled.View`
   margin-bottom: 24px;
 `;
