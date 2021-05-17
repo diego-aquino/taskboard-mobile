@@ -7,6 +7,7 @@ import LoadingIcon from './LoadingIcon';
 import Logo from './Logo';
 import LogoutIcon from './LogoutIcon';
 import MenuIcon from './MenuIcon';
+import PersonsWithTasks from './PersonsWithTasks';
 import PlusIcon from './PlusIcon';
 import PreferencesIcon from './PreferencesIcon';
 import TrashIcon from './TrashIcon';
@@ -24,4 +25,5 @@ export {
   LogoutIcon,
   ChevronIcon,
   TrashIcon,
+  PersonsWithTasks,
 };
