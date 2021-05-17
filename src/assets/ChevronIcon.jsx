@@ -13,24 +13,29 @@ export const Container = styled(Svg)`
         return css`
           transform: rotate(180deg);
         `;
+      case 'right':
+        return css`
+          transform: rotate(90deg);
+        `;
       default:
         return css``;
     }
   }}
 `;
 
-const ChevronIcon = ({ direction = 'up', ...rest }) => (
+const ChevronIcon = ({ direction = 'up', stroke = '#6E7CA9', ...rest }) => (
   <Container
     direction={direction}
-    width={24}
-    height={24}
+    width="100%"
+    height="100%"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...rest}
   >
     <Path
       d="M18 15l-6-6-6 6"
-      stroke="#6E7CA9"
+      stroke={stroke}
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"

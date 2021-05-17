@@ -1,7 +1,10 @@
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 
-import { TrashIcon as BaseTrashIcon } from '~/assets';
+import {
+  TrashIcon as BaseTrashIcon,
+  ChevronIcon as BaseChevronIcon,
+} from '~/assets';
 import { Input as BaseInput } from '~/components/common';
 import variables from '~/styles/variables';
 
@@ -39,3 +42,8 @@ export const RemoveTaskButton = styled.TouchableHighlight.attrs({
 export const TrashIcon = styled(BaseTrashIcon).attrs(({ active }) => ({
   stroke: active ? variables.colors.lightRed : variables.colors.lightBlue,
 }))``;
+
+export const ChevronIcon = styled(BaseChevronIcon).attrs({
+  width: 24,
+  height: 24,
+})``;

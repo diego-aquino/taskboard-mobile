@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 
+import { ChevronIcon as BaseChevronIcon } from '~/assets';
 import variables from '~/styles/variables';
 
 export const Container = styled.View`
@@ -14,3 +15,8 @@ export const Title = styled.Text`
   font-size: 22px;
   text-align: center;
 `;
+
+export const ChevronIcon = styled(BaseChevronIcon).attrs({
+  width: 24,
+  height: 24,
+})``;
