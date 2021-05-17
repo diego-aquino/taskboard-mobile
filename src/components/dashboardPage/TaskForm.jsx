@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { ChevronIcon } from '~/assets';
 import { Button, SingleChoiceCheckboxesInput } from '~/components/common';
 import {
   Container,
@@ -8,6 +7,7 @@ import {
   Input,
   RemoveTaskButton,
   TrashIcon,
+  ChevronIcon,
 } from '~/styles/components/dashboardPage/TaskFormStyles';
 import validate from '~/utils/validation';
 

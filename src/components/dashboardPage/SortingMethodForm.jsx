@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ChevronIcon } from '~/assets';
 import {
   Button,
   SwitchButton,
@@ -9,6 +8,7 @@ import {
 import {
   Container,
   Title,
+  ChevronIcon,
 } from '~/styles/components/dashboardPage/SortingMethodFormStyles';
 
 const SORTING_CRITERIA_OPTIONS = [

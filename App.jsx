@@ -4,6 +4,7 @@ import React from 'react';
 
 import { AccountContextProvider } from '~/contexts/AccountContext';
 import { AuthContextProvider } from '~/contexts/AuthContext';
+import { GlobalSettingsContextProvider } from '~/contexts/GlobalSettingsContext';
 import { useFonts } from '~/hooks';
 import Routes from '~/routes';
 import { Container } from '~/styles/AppStyles';
@@ -17,11 +18,13 @@ const App = () => {
 
   return (
     <AuthContextProvider>
-      <AccountContextProvider>
-        <Container>
-          <Routes />
-        </Container>
-      </AccountContextProvider>
+      <GlobalSettingsContextProvider>
+        <AccountContextProvider>
+          <Container>
+            <Routes />
+          </Container>
+        </AccountContextProvider>
+      </GlobalSettingsContextProvider>
     </AuthContextProvider>
   );
 };
