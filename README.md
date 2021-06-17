@@ -13,6 +13,8 @@
     <a href="#technologist-devs">Devs</a>
 </p>
 
+https://user-images.githubusercontent.com/58959382/122313710-159b4380-ceed-11eb-95db-5907353d7584.mp4
+
 ## :rocket: Features
 
 - Registro de contas, login e logout na plataforma
